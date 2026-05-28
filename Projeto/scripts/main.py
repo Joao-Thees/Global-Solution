@@ -7,4 +7,10 @@ projeto integrado. '''
 podem ser adaptados à sua narrativa '''
 
 ''' processamento via API do consumo de IA, convertendo uso em litros de água e emissão de CO₂. '''
-
+import owslib
+import requests
+import numpy
+import rasterio
+import geopandas
+import pandas
+import matplotlib

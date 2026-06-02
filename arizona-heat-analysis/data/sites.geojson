@@ -1,0 +1,55 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "id": "meta", "name": "Meta Mesa", "trat": "dc", "color": "#e53935" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.600, 33.328], [-111.581, 33.328],
+        [-111.581, 33.344], [-111.600, 33.344], [-111.600, 33.328]
+      ]]}
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "google", "name": "Google Mesa", "trat": "dc", "color": "#fb8c00" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.758, 33.434], [-111.740, 33.434],
+        [-111.740, 33.448], [-111.758, 33.448], [-111.758, 33.434]
+      ]]}
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "cyrusone", "name": "CyrusOne Phoenix", "trat": "dc", "color": "#8e24aa" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-112.018, 33.438], [-112.002, 33.438],
+        [-112.002, 33.452], [-112.018, 33.452], [-112.018, 33.438]
+      ]]}
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "superstition", "name": "Superstition Springs Center", "trat": "mall", "color": "#1e88e5" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.681, 33.380], [-111.661, 33.380],
+        [-111.661, 33.394], [-111.681, 33.394], [-111.681, 33.380]
+      ]]}
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "santan", "name": "SanTan Village", "trat": "mall", "color": "#43a047" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.736, 33.306], [-111.718, 33.306],
+        [-111.718, 33.322], [-111.736, 33.322], [-111.736, 33.306]
+      ]]}
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "arizona_area", "name": "Área de Análise (KML)", "trat": "bbox", "color": "#00bcd4" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.940, 33.504], [-112.116, 33.501],
+        [-112.076, 33.222], [-111.498, 33.206],
+        [-111.499, 33.387], [-111.700, 33.485],
+        [-111.940, 33.504]
+      ]]}
+    }
+  ]
+}

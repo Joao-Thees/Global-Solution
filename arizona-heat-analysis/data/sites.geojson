@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "id": "phoenix_cyrius", "name": "Phoenix Cyrius DataCenter", "trat": "dc", "color": "#FF00FF" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.9013, 33.2909], [-111.9009, 33.2611],
+        [-111.8760, 33.2616], [-111.8764, 33.2912], [-111.9013, 33.2909]
+      ]]}
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "arizona_area", "name": "Área de Análise (KML)", "trat": "bbox", "color": "#00bcd4" },
+      "geometry": { "type": "Polygon", "coordinates": [[
+        [-111.940, 33.504], [-112.116, 33.501],
+        [-112.076, 33.222], [-111.498, 33.206],
+        [-111.499, 33.387], [-111.700, 33.485],
+        [-111.940, 33.504]
+      ]]}
+    }
+  ]
+}

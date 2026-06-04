@@ -1,0 +1,130 @@
+{
+  "versao": "v2",
+  "periodos": {
+    "pre": [
+      2020,
+      2022
+    ],
+    "ops": [
+      2024,
+      2026
+    ]
+  },
+  "n_obs": 1259,
+  "r2": 0.1375,
+  "r2_adj": 0.1327,
+  "coeficientes": {
+    "operacao": 1.8117,
+    "operacao_pval": 0.16654166071943993,
+    "periodo_ops": -1.2626,
+    "ndvi": -1.9771,
+    "ndbi": 68.1975
+  },
+  "decomposicao": [
+    {
+      "site": "phoenix_cyrius",
+      "c_terreno": NaN,
+      "c_geral": -1.263,
+      "c_operacao": 1.812,
+      "total_anomalia": NaN,
+      "pct_terreno": NaN,
+      "pct_geral": NaN,
+      "pct_operacao": NaN
+    },
+    {
+      "site": "dc_demarcado",
+      "c_terreno": NaN,
+      "c_geral": -1.263,
+      "c_operacao": 1.812,
+      "total_anomalia": NaN,
+      "pct_terreno": NaN,
+      "pct_geral": NaN,
+      "pct_operacao": NaN
+    }
+  ],
+  "series_temporais": {
+    "area_verde": {
+      "years": [
+        2020,
+        2021,
+        2022,
+        2024,
+        2025,
+        2026
+      ],
+      "ihi": [
+        -2.657,
+        -5.367,
+        -4.965,
+        -5.178,
+        -4.115,
+        -2.094
+      ]
+    },
+    "cyrusone": {
+      "years": [
+        2020,
+        2021,
+        2022,
+        2024,
+        2025,
+        2026
+      ],
+      "ihi": [
+        -1.772,
+        -0.557,
+        -0.928,
+        -0.888,
+        -0.295,
+        -0.863
+      ]
+    }
+  },
+  "sites": {
+    "phoenix_cyrius": {
+      "name": "Phoenix Cyrius DataCenter",
+      "trat": "dc",
+      "color": "#FF00FF",
+      "center": [
+        -111.889,
+        33.276
+      ],
+      "bbox": [
+        -111.901,
+        33.261,
+        -111.876,
+        33.291
+      ]
+    },
+    "dc_demarcado": {
+      "name": "CyrusOne Phoenix Datacenter (KML)",
+      "trat": "dc",
+      "color": "#FF6600",
+      "center": [
+        -111.8814,
+        33.2712
+      ],
+      "bbox": [
+        -111.8844,
+        33.2653,
+        -111.8805,
+        33.2724
+      ]
+    },
+    "area_verde": {
+      "name": "Area Verde (KML)",
+      "trat": "green",
+      "color": "#00AA00",
+      "center": [
+        -111.8927,
+        33.2677
+      ],
+      "bbox": [
+        -111.8933,
+        33.2673,
+        -111.8892,
+        33.2723
+      ]
+    }
+  }
+}

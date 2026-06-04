@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[V2] O Calor por Trás da Nuvem — Arizona Datacenters (2020–2026)</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
+
+  <link rel="stylesheet" href="css/styleV2.css" />
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Carregando análise térmica v2...</p>
+</div>
+
+<div id="app">
+
+  <div id="map"></div>
+
+  <aside id="panel">
+
+    <div id="panel-header">
+      <div id="v2-badge">VERSÃO 2 — ANÁLISE RECENTE</div>
+      <h1>O Calor por Trás da Nuvem</h1>
+      <p>
+        Análise focada no CyrusOne Phoenix Datacenter vs Área Verde adjacente.
+        Período recente: Landsat 8/9 (2020–2026). Fundo de mapa via GEE (2024–2025).
+      </p>
+    </div>
+
+    <!-- Camadas -->
+    <div class="section">
+      <div class="section-title">Camadas do mapa</div>
+
+      <label class="layer-toggle">
+        <input type="checkbox" id="toggle-heat" checked />
+        <span class="layer-label">Mapa de calor (anomalia LST v2)</span>
+      </label>
+
+      <label class="layer-toggle">
+        <input type="checkbox" id="toggle-rgb" checked />
+        <span class="layer-label">Imagem de fundo GEE (2024–2025)</span>
+      </label>
+
+      <div id="legend">
+        <div id="legend-gradient"></div>
+        <div id="legend-labels">
+          <span>−2 °K</span>
+          <span>0</span>
+          <span>+6 °K</span>
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Opacidade calor</label>
+        <input type="range" id="opacity-slider" min="10" max="100" value="85" />
+        <span class="slider-val" id="opacity-val">85%</span>
+      </div>
+    </div>
+
+    <!-- Períodos -->
+    <div class="section">
+      <div class="section-title">Períodos de análise v2</div>
+      <div style="font-size:11px; line-height:2.2;">
+        <span class="period-pill pre">PRÉ</span> 2020–2022 — antes das novas construções<br>
+        <span class="period-pill ops">OPS</span> 2024–2026 — datacenters recentes em operação<br>
+        <span style="color:#666; font-size:10px;">2023 excluído (transição)</span>
+      </div>
+    </div>
+
+    <!-- Sites -->
+    <div class="section">
+      <div class="section-title">Sites analisados</div>
+      <div style="font-size:11px; line-height:2;">
+        <span style="color:#FF6600;">■</span> CyrusOne Phoenix (tratamento / DC)<br>
+        <span style="color:#00AA00;">■</span> Área Verde adjacente (controle)
+      </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="section">
+      <div class="section-title">Resultados v2</div>
+      <div id="stats-general"></div>
+      <div id="results-container" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- Série temporal -->
+    <div class="section" id="chart-section" style="display:none;">
+      <div class="section-title">Série temporal IHI</div>
+      <div id="chart-container">
+        <canvas id="time-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- Metodologia -->
+    <div class="section">
+      <div class="section-title">Metodologia v2</div>
+      <div style="font-size:11px; color:#aaa; line-height:1.6;">
+        <strong style="color:#ddd;">Modelo:</strong> Diferenças em diferenças<br>
+        <code style="font-size:10px; color:#ff9800;">
+          ihi ~ ndvi + ndbi + zone×trat + trat×period
+        </code><br><br>
+        <strong style="color:#ddd;">Satélites:</strong> Landsat 8 (2020–2025) + Landsat 9 (2022–2026)<br>
+        <strong style="color:#ddd;">Fundo:</strong> RGB GEE — Landsat 9 mediana 2024–2025<br>
+        <strong style="color:#ddd;">Resolução:</strong> 30m/pixel<br><br>
+        Baseado no:
+        <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube"
+          target="_blank" style="color:#ff9800;">El calor detrás de la nube</a>
+        (Amenaza Roboto, Uruguai)
+      </div>
+    </div>
+
+    <div id="attribution">
+      Dados: USGS Landsat / Google Earth Engine &bull;
+      Modelo LST: sofiaermida/landsat_smw_lst &bull;
+      Baseado em: <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube" target="_blank">Amenaza Roboto</a>
+    </div>
+
+  </aside>
+</div>
+
+<div id="map-tip">CyrusOne Phoenix Datacenter — Análise V2 (2020–2026)</div>
+<script src="js/chartsV2.js"></script>
+<script src="js/mainV2.js"></script>
+</body>
+</html>

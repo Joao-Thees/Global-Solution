@@ -1,0 +1,11 @@
+.venv/
+.env
+
+# Arquivos grandes gerados — não rastrear no git
+*.tif
+data/*.png
+data/*.pdf
+
+# Cache Python
+__pycache__/
+*.pyc

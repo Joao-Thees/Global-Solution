@@ -22,24 +22,14 @@
   },
   "decomposicao": [
     {
-      "site": "phoenix_cyrius",
-      "c_terreno": NaN,
+      "site": "cyrusone",
+      "c_terreno": -0.247,
       "c_geral": -1.263,
       "c_operacao": 1.812,
-      "total_anomalia": NaN,
-      "pct_terreno": NaN,
-      "pct_geral": NaN,
-      "pct_operacao": NaN
-    },
-    {
-      "site": "dc_demarcado",
-      "c_terreno": NaN,
-      "c_geral": -1.263,
-      "c_operacao": 1.812,
-      "total_anomalia": NaN,
-      "pct_terreno": NaN,
-      "pct_geral": NaN,
-      "pct_operacao": NaN
+      "total_anomalia": 0.302,
+      "pct_terreno": -82.0,
+      "pct_geral": -418.6,
+      "pct_operacao": 600.6
     }
   ],
   "series_temporais": {
@@ -81,23 +71,8 @@
     }
   },
   "sites": {
-    "phoenix_cyrius": {
-      "name": "Phoenix Cyrius DataCenter",
-      "trat": "dc",
-      "color": "#FF00FF",
-      "center": [
-        -111.889,
-        33.276
-      ],
-      "bbox": [
-        -111.901,
-        33.261,
-        -111.876,
-        33.291
-      ]
-    },
-    "dc_demarcado": {
-      "name": "CyrusOne Phoenix Datacenter (KML)",
+    "cyrusone": {
+      "name": "CyrusOne Phoenix (DC)",
       "trat": "dc",
       "color": "#FF6600",
       "center": [
@@ -112,7 +87,7 @@
       ]
     },
     "area_verde": {
-      "name": "Area Verde (KML)",
+      "name": "Área Verde (controle)",
       "trat": "green",
       "color": "#00AA00",
       "center": [

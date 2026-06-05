@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moodboard — Painel de Missão (FED) | Arizona Heat Analysis V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
+  <style>
+    :root{
+      --bg:#0d0d0d; --card:#16181d; --border:rgba(255,255,255,.14);
+      --txt:#f0f0f0; --muted:#aeb6c2; --accent:#ff6600; --accent2:#ffcc02; --green:#00aa00;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);
+         line-height:1.55;padding:40px 22px 80px;max-width:1100px;margin:0 auto}
+    header.mb{border-bottom:2px solid var(--accent);padding-bottom:18px;margin-bottom:28px}
+    .kicker{display:inline-block;background:var(--accent);color:#000;font-weight:800;
+            font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+    h1{font-size:26px;font-weight:800;margin:12px 0 6px}
+    h2{font-size:16px;font-weight:700;color:var(--accent2);margin:34px 0 12px;
+       text-transform:uppercase;letter-spacing:.06em}
+    h3{font-size:14px;margin:0 0 4px}
+    p{color:var(--muted);font-size:13.5px}
+    .lead{font-size:15px;color:var(--txt);max-width:75ch}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+    .thumb{aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#1c1f25,#1c1f25 12px,#191b20 12px,#191b20 24px);
+           display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:12px;text-align:center;padding:10px}
+    .card .body{padding:14px}
+    .tag{font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .crit{margin-top:8px;font-size:12.5px}
+    .crit b{color:var(--txt)}
+    .palette{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+    .sw{width:120px;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:11px}
+    .sw .chip{height:54px}
+    .sw .lab{padding:6px 8px;color:var(--muted)}
+    .type-sample{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px}
+    .note{margin-top:10px;font-size:12px;color:#6b7280}
+    a{color:var(--accent)}
+    ul{margin:6px 0 0 18px}
+    li{color:var(--muted);font-size:13px;margin-bottom:4px}
+  </style>
+</head>
+<body>
+
+<header class="mb">
+  <span class="kicker">Moodboard · Front-End Design</span>
+  <h1>Painel de Missão — Observação Orbital de Calor</h1>
+  <p class="lead">
+    Direção visual do projeto <b>arizona-heat-analysis (V2)</b>. O produto é um
+    <b>console de observação da Terra</b>: o usuário é um <b>Analista de Observação
+    da Terra</b> de um centro de operações de clima urbano, cuja <b>tarefa crítica</b>
+    é detectar, via LST orbital (Landsat), quando o datacenter ultrapassa o limiar
+    térmico seguro frente à área verde — e emitir alerta. A linguagem visual nasce
+    daí: telemetria escura, alto contraste, leitura rápida sob pressão.
+  </p>
+</header>
+
+<h2>Referências e análise crítica</h2>
+<p>
+  Cada referência abaixo é pública e foi escolhida por um motivo específico — o que
+  <b>adotamos</b> e o que <b>evitamos</b>. Substitua os retângulos por capturas de tela
+  (PNG/JPG) na pasta <code>assets/</code> mantendo as legendas.
+</p>
+
+<div class="grid" style="margin-top:14px">
+  <figure class="card">
+    <div class="thumb">[ trocar por screenshot ]<br>NASA Eyes on the Earth</div>
+    <div class="body">
+      <span class="tag">Cockpit / dados orbitais</span>
+      <h3>NASA — Eyes on the Earth</h3>
+      <p class="crit"><b>Adotamos:</b> fundo escuro com a Terra em destaque e dados
+        sobrepostos como "instrumentos". <b>Evitamos:</b> excesso de números simultâneos
+        que competem pela atenção.</p>
+    </div>
+  </figure>
+
+  <figure class="card">
+    <div class="thumb">[ trocar por screenshot ]<br>NASA Worldview / Copernicus Browser</div>
+    <div class="body">
+      <span class="tag">Earth Observation</span>
+      <h3>Worldview · Copernicus Browser</h3>
+      <p class="crit"><b>Adotamos:</b> mapa em tela cheia + painel lateral de camadas
+        com toggles e opacidade. <b>Evitamos:</b> menus profundos; aqui tudo fica a um clique.</p>
+    </div>
+  </figure>
+
+  <figure class="card">
+    <div class="thumb">[ trocar por screenshot ]<br>SpaceX Dragon — console da tripulação</div>
+    <div class="body">
+      <span class="tag">Telemetria / missão</span>
+      <h3>SpaceX — Console Dragon</h3>
+      <p class="crit"><b>Adotamos:</b> estética sóbria, tipografia geométrica, estados
+        claros (verde = nominal, vermelho = alerta). <b>Evitamos:</b> skeuomorfismo; ficamos no flat.</p>
+    </div>
+  </figure>
+
+  <figure class="card">
+    <div class="thumb">[ trocar por screenshot ]<br>Windy.com — mapa meteorológico</div>
+    <div class="body">
+      <span class="tag">Mapa de calor</span>
+      <h3>Windy.com</h3>
+      <p class="crit"><b>Adotamos:</b> rampa de cor divergente legível e legenda
+        sempre visível. <b>Evitamos:</b> paletas tipo "arco-íris" que distorcem a leitura quantitativa.</p>
+    </div>
+  </figure>
+
+  <figure class="card">
+    <div class="thumb">[ trocar por screenshot ]<br>ESA / Mission Control dashboards</div>
+    <div class="body">
+      <span class="tag">Estado / alerta</span>
+      <h3>Mission Control (ESA)</h3>
+      <p class="crit"><b>Adotamos:</b> faixa de status e banner de alerta de alta
+        prioridade. <b>Evitamos:</b> alarmes que piscam sem informação; nosso alerta diz o porquê.</p>
+    </div>
+  </figure>
+
+  <figure class="card">
+    <div class="thumb">[ trocar por screenshot ]<br>El calor detrás de la nube (Amenaza Roboto)</div>
+    <div class="body">
+      <span class="tag">Projeto-base</span>
+      <h3>El calor detrás de la nube</h3>
+      <p class="crit"><b>Adotamos:</b> a metodologia DiD e a narrativa de denúncia
+        ambiental. <b>Evitamos:</b> a apresentação puramente acadêmica — reposicionamos como missão.</p>
+    </div>
+  </figure>
+</div>
+
+<h2>Paleta de cores</h2>
+<p>Escura para reduzir fadiga em monitoramento prolongado; laranja de missão como acento;
+   verde/vermelho reservados a estado (nominal/alerta). Contrastes conferidos para WCAG AA.</p>
+<div class="palette">
+  <div class="sw"><div class="chip" style="background:#0d0d0d"></div><div class="lab">#0D0D0D · fundo</div></div>
+  <div class="sw"><div class="chip" style="background:#16181d"></div><div class="lab">#16181D · cartão</div></div>
+  <div class="sw"><div class="chip" style="background:#f0f0f0"></div><div class="lab" style="color:#222">#F0F0F0 · texto</div></div>
+  <div class="sw"><div class="chip" style="background:#aeb6c2"></div><div class="lab" style="color:#222">#AEB6C2 · texto 2</div></div>
+  <div class="sw"><div class="chip" style="background:#ff6600"></div><div class="lab">#FF6600 · DC / acento</div></div>
+  <div class="sw"><div class="chip" style="background:#ffcc02"></div><div class="lab" style="color:#222">#FFCC02 · destaque</div></div>
+  <div class="sw"><div class="chip" style="background:#00aa00"></div><div class="lab">#00AA00 · controle</div></div>
+  <div class="sw"><div class="chip" style="background:#ff5a4d"></div><div class="lab">#FF5A4D · alerta</div></div>
+</div>
+
+<h2>Tipografia</h2>
+<div class="type-sample">
+  <div style="font-weight:800;font-size:28px">Inter 800 — Títulos de missão</div>
+  <div style="font-weight:600;font-size:16px;color:var(--muted)">Inter 600 — Rótulos e seções</div>
+  <div style="font-weight:400;font-size:14px;color:var(--muted)">Inter 400 — Texto corrido e telemetria (tabular-nums nos números)</div>
+  <p class="note">Inter: alta legibilidade em telas, numerais tabulares (alinham as
+     leituras de temperatura), licença livre (Google Fonts). Pesos limitados a 400/600/700/800
+     para hierarquia clara sem ruído.</p>
+</div>
+
+<h2>Princípios de direção visual</h2>
+<ul>
+  <li><b>Hierarquia de leitura sob pressão:</b> estado e alerta vêm primeiro; detalhe analítico depois.</li>
+  <li><b>Cor com significado:</b> laranja = sujeito da missão (datacenter); verde = controle; vermelho = só emergência.</li>
+  <li><b>Densidade controlada:</b> um mapa dominante + painel modular em seções; nada de "div soup".</li>
+  <li><b>Acessível por padrão:</b> contraste AA, foco visível, navegação por teclado, alternativas textuais.</li>
+  <li><b>Responsivo:</b> em telas pequenas o mapa vira topo e o painel desce, sem perder o alerta.</li>
+</ul>
+
+<p class="note" style="margin-top:30px">
+  Moodboard do projeto arizona-heat-analysis · disciplina Front-End Design (FED) ·
+  Global Solution 2026 · FIAP. As imagens de referência são marcadas de terceiros usadas
+  apenas para estudo de direção visual.
+</p>
+
+</body>
+</html>

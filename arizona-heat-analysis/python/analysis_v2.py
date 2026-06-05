@@ -5,12 +5,37 @@ Períodos: pre(2020-2022) vs ops(2024-2026) — sem período build
 """
 
 import json
+import math
 import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
+
+# O console do Windows usa cp1252 por padrão e quebra (UnicodeEncodeError)
+# ao imprimir caracteres como '→' e '─'. Força UTF-8 para que os prints
+# não derrubem o pipeline antes de exportar o JSON.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except (AttributeError, ValueError):
+    pass
+
+
+def _clean_json(obj):
+    """Substitui NaN/Inf por None recursivamente.
+
+    NaN não faz parte da especificação JSON: gravá-lo deixa o arquivo
+    inválido e o fetch().json() do navegador lança erro (bug C2). Esta
+    função garante que o results_v2.json seja sempre parseável.
+    """
+    if isinstance(obj, float):
+        return obj if math.isfinite(obj) else None
+    if isinstance(obj, dict):
+        return {k: _clean_json(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_clean_json(v) for v in obj]
+    return obj
 
 sys.path.insert(0, str(Path(__file__).parent))
 import config
@@ -153,7 +178,9 @@ def export_results(model, dados: pd.DataFrame):
     try:
         Path(config.RESULTS_JSON_V2).parent.mkdir(parents=True, exist_ok=True)
         with open(config.RESULTS_JSON_V2, "w", encoding="utf-8") as f:
-            json.dump(output, f, ensure_ascii=False, indent=2)
+            # allow_nan=False: após _clean_json não deve restar NaN; se restar,
+            # falha aqui em vez de gravar um JSON inválido silenciosamente.
+            json.dump(_clean_json(output), f, ensure_ascii=False, indent=2, allow_nan=False)
     except OSError as e:
         print(f"[ERRO] Não foi possível salvar os resultados em {config.RESULTS_JSON_V2}: {e}")
         sys.exit(1)

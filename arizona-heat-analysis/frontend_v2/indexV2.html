@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[V2] O Calor por Trás da Nuvem — Arizona Datacenters (2020–2026)</title>
+  <title>Painel de Missão — Observação Orbital de Calor de Datacenters | Arizona V2</title>
+  <meta name="description"
+        content="Painel de missão de observação da Terra: monitora, via LST orbital (Landsat),
+                 o impacto térmico do datacenter CyrusOne Phoenix sobre a área verde adjacente." />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -18,29 +21,131 @@
 </head>
 <body>
 
-<div id="loading">
-  <div class="spinner"></div>
-  <p>Carregando análise térmica v2...</p>
+<a href="#main-map" class="skip-link">Pular para o mapa</a>
+
+<div id="loading" role="status" aria-live="polite">
+  <div class="spinner" aria-hidden="true"></div>
+  <p>Inicializando painel de missão…</p>
 </div>
 
 <div id="app">
 
-  <div id="map"></div>
+  <!-- ───────────────── REGIÃO PRINCIPAL: MAPA ORBITAL ───────────────── -->
+  <main id="main-map" aria-label="Mapa de observação orbital">
+    <div id="map" role="application" aria-label="Mapa Leaflet com camadas de anomalia térmica (LST) e imagem orbital de fundo"></div>
 
-  <aside id="panel">
-
-    <div id="panel-header">
-      <div id="v2-badge">VERSÃO 2 — ANÁLISE RECENTE</div>
-      <h1>O Calor por Trás da Nuvem</h1>
-      <p>
-        Análise focada no CyrusOne Phoenix Datacenter vs Área Verde adjacente.
-        Período recente: Landsat 8/9 (2020–2026). Fundo de mapa via GEE (2024–2025).
-      </p>
+    <!-- Alerta crítico (component) — controlado por JS (telemetria) -->
+    <div id="alert-banner" class="alert-banner" role="alert" aria-live="assertive" hidden>
+      <span class="alert-icon" aria-hidden="true">▲</span>
+      <span id="alert-text">Anomalia térmica acima do limiar seguro.</span>
+      <button type="button" id="alert-dismiss" class="alert-close" aria-label="Dispensar alerta">×</button>
     </div>
+  </main>
 
-    <!-- Camadas -->
-    <div class="section">
-      <div class="section-title">Camadas do mapa</div>
+  <!-- ───────────────── PAINEL DE MISSÃO ───────────────── -->
+  <aside id="panel" aria-label="Painel de controle da missão">
+
+    <header id="panel-header">
+      <p id="v2-badge">Painel de Missão · Observação Orbital da Terra</p>
+      <h1>O Calor por Trás da Nuvem</h1>
+      <p class="mission-brief">
+        <strong>Missão:</strong> vigiar, via sensoriamento remoto Landsat (2020–2026), o impacto
+        térmico do <strong>CyrusOne Phoenix Datacenter</strong> sobre a área verde de controle e
+        sinalizar quando a anomalia de superfície (LST) ultrapassa o limiar seguro.
+      </p>
+      <dl class="mission-meta">
+        <dt>Operador</dt>
+        <dd>Analista de Observação da Terra — Centro de Operações de Clima Urbano</dd>
+        <dt>Tarefa crítica</dt>
+        <dd>Detectar excesso de calor do datacenter e emitir alerta de emergência.</dd>
+      </dl>
+
+      <nav class="panel-nav" aria-label="Seções do painel">
+        <a href="#sec-telemetria">Telemetria</a>
+        <a href="#sec-camadas">Camadas</a>
+        <a href="#sec-controles">Controles</a>
+        <a href="#sec-resultados">Resultados</a>
+      </nav>
+    </header>
+
+    <!-- ───── TELEMETRIA AO VIVO (tabela de dados + BOM/tempo real) ───── -->
+    <section id="sec-telemetria" class="section" aria-labelledby="h-telemetria">
+      <h2 id="h-telemetria" class="section-title">Telemetria orbital ao vivo</h2>
+
+      <p class="status-line">
+        Estado da estação:
+        <span id="link-status" class="status-pill status-ok" aria-live="polite">CONECTANDO…</span>
+        <span class="muted">·</span>
+        Varredura:
+        <span id="scan-count" aria-live="polite">0</span>
+      </p>
+
+      <table class="telemetry-table" aria-describedby="telemetry-cap">
+        <caption id="telemetry-cap" class="visually-hidden">
+          Leituras simuladas de temperatura de superfície atualizadas a cada poucos segundos.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Sensor</th>
+            <th scope="col">LST</th>
+            <th scope="col">°C</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"><span class="dot dot-dc" aria-hidden="true"></span>Datacenter</th>
+            <td id="tlm-dc-k">—</td>
+            <td id="tlm-dc-c">—</td>
+          </tr>
+          <tr>
+            <th scope="row"><span class="dot dot-green" aria-hidden="true"></span>Área verde</th>
+            <td id="tlm-green-k">—</td>
+            <td id="tlm-green-c">—</td>
+          </tr>
+          <tr class="row-delta">
+            <th scope="row">Δ Anomalia</th>
+            <td id="tlm-delta-k">—</td>
+            <td id="tlm-delta-c">—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="status-line">
+        Veredito:
+        <span id="thermal-status" class="status-pill status-ok" aria-live="assertive">—</span>
+        <span class="muted">(limiar: <span id="threshold-label">+4.0</span> °C)</span>
+      </p>
+    </section>
+
+    <!-- ───── CONTROLES (botões + formulário com validação) ───── -->
+    <section id="sec-controles" class="section" aria-labelledby="h-controles">
+      <h2 id="h-controles" class="section-title">Controles da missão</h2>
+
+      <div class="btn-row">
+        <button type="button" id="btn-scan" class="btn btn-primary">Forçar varredura</button>
+        <button type="button" id="btn-reconnect" class="btn">Reconectar satélite</button>
+        <button type="button" id="btn-arm" class="btn btn-armed" aria-pressed="true">Alerta: ARMADO</button>
+      </div>
+
+      <form id="threshold-form" class="mission-form" novalidate aria-labelledby="h-form">
+        <h3 id="h-form" class="form-title">Configurar limiar de alerta</h3>
+        <div class="form-row">
+          <label for="threshold-input">Limiar Δ seguro (°C)</label>
+          <input type="number" id="threshold-input" name="threshold"
+                 min="0" max="20" step="0.1" value="4.0"
+                 inputmode="decimal" aria-describedby="threshold-help threshold-error" required />
+        </div>
+        <p id="threshold-help" class="form-help">
+          Acima desta diferença Datacenter − Área verde, a estação emite alerta. Faixa: 0–20 °C.
+        </p>
+        <p id="threshold-error" class="form-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Aplicar limiar</button>
+      </form>
+    </section>
+
+    <!-- ───── CAMADAS DO MAPA (nav de visualização) ───── -->
+    <section id="sec-camadas" class="section" aria-labelledby="h-camadas">
+      <h2 id="h-camadas" class="section-title">Camadas do mapa</h2>
 
       <label class="layer-toggle">
         <input type="checkbox" id="toggle-heat" checked />
@@ -53,8 +158,8 @@
       </label>
 
       <div id="legend">
-        <div id="legend-gradient"></div>
-        <div id="legend-labels">
+        <div id="legend-gradient" role="img" aria-label="Escala de cor da anomalia: azul −2 °K, branco 0, vermelho +6 °K"></div>
+        <div id="legend-labels" aria-hidden="true">
           <span>−2 °K</span>
           <span>0</span>
           <span>+6 °K</span>
@@ -62,75 +167,77 @@
       </div>
 
       <div class="slider-row">
-        <label>Opacidade calor</label>
-        <input type="range" id="opacity-slider" min="10" max="100" value="85" />
-        <span class="slider-val" id="opacity-val">85%</span>
+        <label for="opacity-slider">Opacidade do calor</label>
+        <input type="range" id="opacity-slider" min="10" max="100" value="85"
+               aria-describedby="opacity-val" />
+        <span class="slider-val" id="opacity-val" aria-live="polite">85%</span>
       </div>
-    </div>
+    </section>
 
-    <!-- Períodos -->
-    <div class="section">
-      <div class="section-title">Períodos de análise v2</div>
-      <div style="font-size:11px; line-height:2.2;">
-        <span class="period-pill pre">PRÉ</span> 2020–2022 — antes das novas construções<br>
-        <span class="period-pill ops">OPS</span> 2024–2026 — datacenters recentes em operação<br>
-        <span style="color:#666; font-size:10px;">2023 excluído (transição)</span>
-      </div>
-    </div>
+    <!-- ───── PERÍODOS ───── -->
+    <section class="section" aria-labelledby="h-periodos">
+      <h2 id="h-periodos" class="section-title">Períodos de análise v2</h2>
+      <p class="period-legend">
+        <span class="period-pill pre">PRÉ</span> 2020–2022 — antes das novas construções<br />
+        <span class="period-pill ops">OPS</span> 2024–2026 — datacenters recentes em operação<br />
+        <span class="muted small">2023 excluído (transição)</span>
+      </p>
+    </section>
 
-    <!-- Sites -->
-    <div class="section">
-      <div class="section-title">Sites analisados</div>
-      <div style="font-size:11px; line-height:2;">
-        <span style="color:#FF6600;">■</span> CyrusOne Phoenix (tratamento / DC)<br>
-        <span style="color:#00AA00;">■</span> Área Verde adjacente (controle)
-      </div>
-    </div>
+    <!-- ───── SITES ───── -->
+    <section class="section" aria-labelledby="h-sites">
+      <h2 id="h-sites" class="section-title">Sites analisados</h2>
+      <ul class="site-list">
+        <li><span class="dot dot-dc" aria-hidden="true"></span>CyrusOne Phoenix (tratamento / DC)</li>
+        <li><span class="dot dot-green" aria-hidden="true"></span>Área Verde adjacente (controle)</li>
+      </ul>
+    </section>
 
-    <!-- Resultados -->
-    <div class="section">
-      <div class="section-title">Resultados v2</div>
+    <!-- ───── RESULTADOS ───── -->
+    <section id="sec-resultados" class="section" aria-labelledby="h-resultados">
+      <h2 id="h-resultados" class="section-title">Resultados v2</h2>
       <div id="stats-general"></div>
-      <div id="results-container" style="margin-top:10px;"></div>
-    </div>
+      <div id="results-container"></div>
+    </section>
 
-    <!-- Série temporal -->
-    <div class="section" id="chart-section" style="display:none;">
-      <div class="section-title">Série temporal IHI</div>
+    <!-- ───── SÉRIE TEMPORAL ───── -->
+    <section class="section" id="chart-section" hidden aria-labelledby="h-chart">
+      <h2 id="h-chart" class="section-title">Série temporal IHI</h2>
       <div id="chart-container">
-        <canvas id="time-chart"></canvas>
+        <canvas id="time-chart" role="img"
+                aria-label="Gráfico de linha da anomalia IHI por ano para datacenter e área verde"></canvas>
       </div>
-    </div>
+    </section>
 
-    <!-- Metodologia -->
-    <div class="section">
-      <div class="section-title">Metodologia v2</div>
-      <div style="font-size:11px; color:#aaa; line-height:1.6;">
-        <strong style="color:#ddd;">Modelo:</strong> Diferenças em diferenças<br>
-        <code style="font-size:10px; color:#ff9800;">
-          ihi ~ ndvi + ndbi + zone×trat + trat×period
-        </code><br><br>
-        <strong style="color:#ddd;">Satélites:</strong> Landsat 8 (2020–2025) + Landsat 9 (2022–2026)<br>
-        <strong style="color:#ddd;">Fundo:</strong> RGB GEE — Landsat 9 mediana 2024–2025<br>
-        <strong style="color:#ddd;">Resolução:</strong> 30m/pixel<br><br>
-        Baseado no:
-        <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube"
-          target="_blank" style="color:#ff9800;">El calor detrás de la nube</a>
-        (Amenaza Roboto, Uruguai)
+    <!-- ───── METODOLOGIA ───── -->
+    <section class="section" aria-labelledby="h-metodo">
+      <h2 id="h-metodo" class="section-title">Metodologia v2</h2>
+      <div class="methodology">
+        <strong>Modelo:</strong> Diferenças em diferenças<br />
+        <code>ihi ~ ndvi + ndbi + zone×trat + trat×period</code><br /><br />
+        <strong>Satélites:</strong> Landsat 8 (2020–2025) + Landsat 9 (2022–2026)<br />
+        <strong>Fundo:</strong> RGB GEE — Landsat 9 mediana 2024–2025<br />
+        <strong>Resolução:</strong> 30 m/pixel<br /><br />
+        Baseado no
+        <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube" target="_blank"
+           rel="noopener">El calor detrás de la nube</a> (Amenaza Roboto, Uruguai).
       </div>
-    </div>
+    </section>
 
-    <div id="attribution">
-      Dados: USGS Landsat / Google Earth Engine &bull;
-      Modelo LST: sofiaermida/landsat_smw_lst &bull;
-      Baseado em: <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube" target="_blank">Amenaza Roboto</a>
-    </div>
+    <footer id="attribution">
+      Dados: USGS Landsat / Google Earth Engine ·
+      Modelo LST: sofiaermida/landsat_smw_lst ·
+      Baseado em: <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube"
+                     target="_blank" rel="noopener">Amenaza Roboto</a>
+    </footer>
 
   </aside>
 </div>
 
-<div id="map-tip">CyrusOne Phoenix Datacenter — Análise V2 (2020–2026)</div>
+<div id="map-tip" role="tooltip">CyrusOne Phoenix Datacenter — Análise V2 (2020–2026)</div>
+
 <script src="js/chartsV2.js"></script>
 <script src="js/mainV2.js"></script>
+<script src="js/telemetryV2.js"></script>
 </body>
 </html>

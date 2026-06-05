@@ -3,20 +3,18 @@
   "features": [
     {
       "type": "Feature",
-      "properties": { "id": "phoenix_cyrius", "name": "Phoenix Cyrius DataCenter", "trat": "dc", "color": "#FF00FF" },
+      "properties": { "id": "cyrusone", "name": "CyrusOne Phoenix (DC)", "trat": "dc", "color": "#FF6600" },
       "geometry": { "type": "Polygon", "coordinates": [[
-        [-111.9013, 33.2909], [-111.9009, 33.2611],
-        [-111.8760, 33.2616], [-111.8764, 33.2912], [-111.9013, 33.2909]
+        [-111.8844, 33.2653], [-111.8805, 33.2653],
+        [-111.8805, 33.2724], [-111.8844, 33.2724], [-111.8844, 33.2653]
       ]]}
     },
     {
       "type": "Feature",
-      "properties": { "id": "arizona_area", "name": "Área de Análise (KML)", "trat": "bbox", "color": "#00bcd4" },
+      "properties": { "id": "area_verde", "name": "Área Verde (controle)", "trat": "green", "color": "#00AA00" },
       "geometry": { "type": "Polygon", "coordinates": [[
-        [-111.940, 33.504], [-112.116, 33.501],
-        [-112.076, 33.222], [-111.498, 33.206],
-        [-111.499, 33.387], [-111.700, 33.485],
-        [-111.940, 33.504]
+        [-111.8933, 33.2673], [-111.8892, 33.2673],
+        [-111.8892, 33.2723], [-111.8933, 33.2723], [-111.8933, 33.2673]
       ]]}
     }
   ]

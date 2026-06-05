@@ -8,22 +8,19 @@ Ajuste os períodos e coordenadas aqui conforme necessário.
 # trat: "dc" = tratamento (datacenter) | "green" = área verde
 # ──────────────────────────────────────────────────
 SITES = { # dicionario chave x valor com dados de cada local a partir da bbox deles.
-    "phoenix_cyrius": {
-        "name": "Phoenix Cyrius DataCenter",
-        "trat": "dc",
-        "color": "#FF00FF",
-        "center": [-111.889, 33.276],
-        "bbox": [-111.901, 33.261, -111.876, 33.291],
-    },
-    "dc_demarcado": {
-        "name": "CyrusOne Phoenix Datacenter (KML)",
+    # IMPORTANTE: as chaves abaixo DEVEM bater com a coluna `site` de
+    # dados_sat_v2.csv (cyrusone / area_verde) e com os IDs usados no
+    # frontend (chartsV2.js, sites.geojson). Manter coerência entre os
+    # quatro arquivos — caso contrário a decomposição fica vazia (NaN).
+    "cyrusone": {
+        "name": "CyrusOne Phoenix (DC)",
         "trat": "dc",
         "color": "#FF6600",
         "center": [-111.8814, 33.2712],
         "bbox": [-111.8844, 33.2653, -111.8805, 33.2724],
     },
     "area_verde": {
-        "name": "Area Verde (KML)",
+        "name": "Área Verde (controle)",
         "trat": "green",
         "color": "#00AA00",
         "center": [-111.8927, 33.2677],

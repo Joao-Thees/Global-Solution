@@ -5,8 +5,15 @@ arizona-heat-analysis/data/*.png
 !arizona-heat-analysis/data/heatmap_v2.png
 !arizona-heat-analysis/data/rgb_background.png
 arizona-heat-analysis/data/*.pdf
+# Exceto os relatórios da entrega (documentação)
+!arizona-heat-analysis/data/relatorio_v2.pdf
+!arizona-heat-analysis/data/relatorio_alteracoes_v2.pdf
+!arizona-heat-analysis/data/relatorio_completo_v2.pdf
 __pycache__/
 *.pyc
+
+# Ambiente virtual
+.venv/
 
 # Git interno temporário
 .git_backup/

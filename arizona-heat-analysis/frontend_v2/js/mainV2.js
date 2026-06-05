@@ -22,6 +22,16 @@ const map = L.map('map', {
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+// Recalcula o tamanho do mapa quando a tela muda (rotação / resize em mobile),
+// senão o Leaflet renderiza tiles cinza ou desalinhados.
+let _resizeTimer = null;
+function refreshMapSize() {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => map.invalidateSize(), 200);
+}
+window.addEventListener('resize', refreshMapSize);
+window.addEventListener('orientationchange', refreshMapSize);
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 2. IMAGEM RGB DE FUNDO (GEE Landsat 9, 2024-2025)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -112,7 +122,7 @@ async function loadSites() {
         if (f.properties.trat === 'bbox') return;
 
         const tip = document.getElementById('map-tip');
-        if (f.properties.id === 'dc_demarcado') {
+        if (f.properties.id === 'cyrusone') {
           layer.on('mouseover', ()  => { tip.style.display = 'block'; });
           layer.on('mousemove', e   => {
             tip.style.left = (e.originalEvent.clientX + 14) + 'px';
@@ -160,7 +170,7 @@ function renderResults(data) {
         <div class="stat-label">R² do modelo</div>
       </div>
     </div>
-    <div style="margin-top:8px;font-size:10px;color:#777;">
+    <div style="margin-top:8px;font-size:10px;color:var(--text-muted);">
       Coef. operação:
       <span style="color:#ff9800;font-weight:700;">
         ${data.coeficientes?.operacao != null
@@ -187,7 +197,7 @@ function renderResults(data) {
           ${total !== null ? sign+total.toFixed(2) : '—'}
           <span class="anomaly-unit">°K</span>
         </div>
-        <div style="font-size:10px;color:#777;margin-bottom:8px;">anomalia total PRÉ → OPS (v2)</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;">anomalia total PRÉ → OPS (v2)</div>
         <div class="breakdown">
           ${row('Cobertura do solo',    d.c_terreno,  d.pct_terreno,  '#fdae61')}
           ${row('Tendência regional',   d.c_geral,    d.pct_geral,    '#74add1')}
@@ -206,7 +216,7 @@ function row(label, val, pct, color) {
   if (val == null || isNaN(val)) return `
     <div class="breakdown-row">
       <span style="width:100px;font-size:10px;color:#aaa;">${label}</span>
-      <span style="font-size:10px;color:#555;">—</span>
+      <span style="font-size:10px;color:var(--text-dim);">—</span>
     </div>`;
   const sign = val >= 0 ? '+' : '';
   return `
@@ -216,13 +226,13 @@ function row(label, val, pct, color) {
         <div class="breakdown-bar" style="width:${Math.min(Math.abs(pct||0),100)}%;background:${color};"></div>
       </div>
       <span class="breakdown-pct">${sign}${val.toFixed(2)}°</span>
-      <span style="font-size:10px;color:#666;min-width:32px;">${Math.abs(pct||0).toFixed(0)}%</span>
+      <span style="font-size:10px;color:var(--text-dim);min-width:32px;">${Math.abs(pct||0).toFixed(0)}%</span>
     </div>`;
 }
 
 function renderDemoResults() {
   document.getElementById('stats-general').innerHTML = `
-    <div style="font-size:11px;color:#777;text-align:center;padding:10px 0;">
+    <div style="font-size:11px;color:var(--text-muted);text-align:center;padding:10px 0;">
       Execute <code style="color:#ff9800;">python/analysis_v2.py</code><br>para gerar os resultados v2
     </div>`;
 }

@@ -8,6 +8,10 @@ data/*.png
 !data/heatmap_v2.png
 !data/rgb_background.png
 data/*.pdf
+# Exceto os relatórios da entrega (documentação)
+!data/relatorio_v2.pdf
+!data/relatorio_alteracoes_v2.pdf
+!data/relatorio_completo_v2.pdf
 
 # Cache Python
 __pycache__/

@@ -4,6 +4,9 @@
 # Arquivos grandes gerados — não rastrear no git
 *.tif
 data/*.png
+# Exceto os PNGs leves que o frontend renderiza (precisam existir ao clonar)
+!data/heatmap_v2.png
+!data/rgb_background.png
 data/*.pdf
 
 # Cache Python

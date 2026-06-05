@@ -1,6 +1,9 @@
 ﻿# Arquivos grandes — não rastrear no git
 *.tif
 arizona-heat-analysis/data/*.png
+# Exceto os PNGs leves que o frontend renderiza (precisam existir ao clonar)
+!arizona-heat-analysis/data/heatmap_v2.png
+!arizona-heat-analysis/data/rgb_background.png
 arizona-heat-analysis/data/*.pdf
 __pycache__/
 *.pyc

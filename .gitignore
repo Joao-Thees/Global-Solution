@@ -1,7 +1,4 @@
-﻿.venv/
-.env
-
-# Arquivos grandes — não rastrear no git
+﻿# Arquivos grandes — não rastrear no git
 *.tif
 arizona-heat-analysis/data/*.png
 arizona-heat-analysis/data/*.pdf

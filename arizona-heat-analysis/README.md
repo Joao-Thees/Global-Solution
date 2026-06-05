@@ -1,82 +1,112 @@
-# Arizona Datacenter Heat Analysis
+# Arizona Datacenter Heat Analysis — V2
 
-Análise do efeito de ilha de calor urbana gerado por datacenters no Arizona (EUA).
-Baseado na metodologia de [El calor detrás de la nube](https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube) (Amenaza Roboto, Uruguai).
+Análise do impacto térmico do **CyrusOne Phoenix Datacenter** sobre a temperatura superficial (LST) em relação a uma área verde adjacente, Phoenix, AZ — 2025.
 
-## Sites analisados
+Corrobora os achados de [techxplore.com/news/2026-05-centers-nearby-temperatures-degrees-phoenix](https://techxplore.com/news/2026-05-centers-nearby-temperatures-degrees-phoenix.html) usando dados Landsat via Google Earth Engine.
 
-| Site | Tipo | Localização |
-|------|------|-------------|
-| Meta Platforms | Datacenter (tratamento) | Mesa, AZ |
-| Google LLC | Datacenter (tratamento) | Mesa/Phoenix, AZ |
-| CyrusOne | Datacenter (tratamento) | Phoenix, AZ |
-| Superstition Springs Center | Shopping (controle) | Mesa, AZ |
-| SanTan Village | Shopping (controle) | Gilbert, AZ |
+---
 
-## Fluxo de trabalho
+## Dados pesados (TIF) — download obrigatório
 
-### 1. Extrair dados do Google Earth Engine
+Os arquivos GeoTIFF não estão no repositório (tamanho > 100 MB). Baixe o `.zip` no link abaixo e extraia o conteúdo dentro de `data/gee_exports_v2/`:
 
-1. Acesse https://code.earthengine.google.com
-2. Execute cada script da pasta `gee/` na ordem:
-   - `01_dados_sat.js` → exporta `dados_sat.csv`
-   - `02_reflst.js` → exporta `reflst.csv`
-   - `03_lst_image_export.js` → exporta `delta_lst.tif`
-3. Baixe os arquivos do Google Drive (pasta `GEE_Arizona`) para `data/gee_exports/`
+**Download:** https://drive.google.com/drive/u/4/folders/1thUj2OWMXYefcRDSgmpq38qUsucMlkAZ
 
-### 2. Rodar a análise Python
-
-```bash
-cd python
-pip install -r requirements.txt
-python run_all.py
-```
-
-Isso executa o modelo diferenças-em-diferenças e gera o mapa de calor.
-
-### 3. Visualizar
-
-Abra `frontend/index.html` em um servidor HTTP local:
-
-```bash
-cd frontend
-python -m http.server 8765
-# Acesse: http://localhost:8765
-```
-
-## Metodologia
-
-**Modelo:** Diferenças em diferenças com controles de cobertura
+Arquivos esperados após extração:
 
 ```
-ihi ~ ndvi + ndbi + zone × trat + trat × period
+data/gee_exports_v2/
+├── delta_lst_v2.tif       # anomalia térmica (heatmap)
+├── lst_ops_v2.tif         # LST absoluta período operacional
+└── rgb_background.tif     # imagem RGB Sentinel-2 (fundo do mapa)
 ```
 
-- `ihi` = temperatura local − média regional anual (índice de ilha de calor)
-- `ndvi` = índice de vegetação (controla mudança de cobertura)
-- `ndbi` = índice de construção (controla impermeabilização)
-- `zone` = sitio / inner (0-150m) / outer (150-300m)
-- `trat` = TRUE (datacenter) / FALSE (controle)
-- `period` = pre (2000-2015) / ops (2019-2025)
+> Os CSVs (`dados_sat_v2.csv`, `reflst_v2.csv`) já estão no repositório.
 
-**Períodos:**
-- `pre`: 2000–2015 (pré-construção)
-- `build`: 2016–2018 (obras — excluído do modelo)
-- `ops`: 2019–2025 (datacenters operacionais)
+---
 
-**Dados:** Landsat 7/8/9 (30m resolução), LST via módulo `sofiaermida/landsat_smw_lst`
+## Instalação
+
+```powershell
+# Ativar ambiente virtual
+.venv\Scripts\Activate.ps1
+
+# Instalar dependências
+pip install -r arizona-heat-analysis/python/requirements.txt
+```
+
+---
+
+## Rodar o pipeline V2
+
+```powershell
+cd arizona-heat-analysis/python
+python main.py
+```
+
+Executa em sequência:
+1. `generate_report_v2.py` → `data/relatorio_v2.pdf` (LST 2025: datacenter vs área verde)
+2. `generate_heatmap_v2.py` → `data/heatmap_v2.png` (mapa de calor Landsat)
+3. `generate_background.py` → `data/rgb_background.png` (fundo Sentinel-2 para o mapa)
+
+### Visualizar no navegador
+
+```powershell
+cd arizona-heat-analysis/frontend_v2
+python -m http.server 8766
+# Acesse: http://localhost:8766
+```
+
+### Ferramenta DiD (opcional)
+
+```powershell
+python arizona-heat-analysis/python/analysis_v2.py
+```
+
+Roda o modelo Diferenças-em-Diferenças (2020–2026) e atualiza `data/results_v2.json` usado pelos gráficos do frontend.
+
+---
 
 ## Estrutura
 
 ```
 arizona-heat-analysis/
-├── gee/                    # Scripts Google Earth Engine (JavaScript)
-├── python/                 # Análise estatística (Python/statsmodels)
-├── frontend/               # Visualização web (Leaflet + Chart.js)
+├── gee_v2/                        # Scripts Google Earth Engine (JavaScript)
+│   ├── 01_dados_sat.js            # extrai LST, NDVI, NDBI por site/zona/ano
+│   ├── 02_reflst.js               # temperatura de referência regional
+│   ├── 03_lst_image_export.js     # exporta raster de anomalia e LST ops
+│   └── 04_rgb_background.js       # exporta imagem RGB Sentinel-2 (10m)
+├── python/
+│   ├── config.py                  # fonte única de verdade (sites, caminhos)
+│   ├── main.py                    # pipeline completo (roda tudo)
+│   ├── generate_report_v2.py      # relatório PDF — LST absoluta 2025
+│   ├── generate_heatmap_v2.py     # mapa de calor PNG
+│   ├── generate_background.py     # imagem RGB de fundo
+│   ├── analysis_v2.py             # modelo DiD (ferramenta separada)
+│   └── requirements.txt
+├── frontend_v2/                   # Visualização web (Leaflet + Chart.js)
 └── data/
-    ├── sites.geojson       # Polígonos dos sites
-    ├── heatmap.png         # Mapa de calor (gerado pelo Python)
-    ├── heatmap_bounds.json # Coordenadas do heatmap
-    ├── results.json        # Resultados do modelo (gerado pelo Python)
-    └── gee_exports/        # CSVs e GeoTIFF do GEE (colocar aqui)
+    ├── gee_exports_v2/            # inputs do GEE (TIFs via Drive, CSVs no repo)
+    ├── sites.geojson
+    ├── results_v2.json            # output do DiD (usado pelo frontend)
+    ├── heatmap_bounds_v2.json
+    └── rgb_bounds.json
 ```
+
+---
+
+## Metodologia
+
+**Relatório (V2 principal):** compara LST absoluta média de 2025 (79 cenas Landsat) entre o CyrusOne Phoenix Datacenter e a área verde adjacente demarcada por KML.
+
+**Modelo DiD (ferramenta adicional):**
+
+```
+ihi ~ ndvi + ndbi + C(zone)*C(trat) + C(trat)*C(period)
+```
+
+- `ihi` = LST local − temperatura média regional do ano (`ref2`)
+- `period`: `pre` (2020–2022) vs `ops` (2024–2026)
+- Coeficiente-chave: `C(trat)[T.True]:C(period)[T.ops]`
+
+**Dados:** Landsat 8/9 (30 m) via módulo `sofiaermida/landsat_smw_lst` no GEE.

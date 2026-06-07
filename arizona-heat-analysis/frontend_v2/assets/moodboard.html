@@ -9,7 +9,7 @@
   <style>
     :root{
       --bg:#0d0d0d; --card:#16181d; --border:rgba(255,255,255,.14);
-      --txt:#f0f0f0; --muted:#aeb6c2; --accent:#ff6600; --accent2:#ffcc02; --green:#00aa00;
+      --txt:#f0f0f0; --muted:#aeb6c2; --accent:#ff9800; --dc:#ff6600; --accent2:#ffcc02; --green:#00aa00;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);
@@ -25,8 +25,13 @@
     .lead{font-size:15px;color:var(--txt);max-width:75ch}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
     .card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-    .thumb{aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#1c1f25,#1c1f25 12px,#191b20 12px,#191b20 24px);
+    .thumb{position:relative;overflow:hidden;aspect-ratio:16/9;
+           background:repeating-linear-gradient(45deg,#1c1f25,#1c1f25 12px,#191b20 12px,#191b20 24px);
            display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:12px;text-align:center;padding:10px}
+    /* a imagem cobre o retângulo listrado quando existir; se faltar, o onerror
+       remove o img e a legenda volta a aparecer */
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .thumb-cap{position:relative;z-index:1}
     .card .body{padding:14px}
     .tag{font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
     .crit{margin-top:8px;font-size:12.5px}
@@ -60,13 +65,20 @@
 <h2>Referências e análise crítica</h2>
 <p>
   Cada referência abaixo é pública e foi escolhida por um motivo específico — o que
-  <b>adotamos</b> e o que <b>evitamos</b>. Substitua os retângulos por capturas de tela
-  (PNG/JPG) na pasta <code>assets/</code> mantendo as legendas.
+  <b>adotamos</b> e o que <b>evitamos</b>. Para aparecerem aqui, basta salvar os prints
+  nesta pasta <code>assets/</code> com estes nomes:
+  <code>ref-nasa-eyes.png</code>, <code>ref-worldview.png</code>,
+  <code>ref-spacex-dragon.png</code>, <code>ref-windy.png</code>,
+  <code>ref-esa-mission-control.png</code> e <code>ref-el-calor.png</code>.
+  Enquanto não existirem, o retângulo com a legenda continua no lugar.
 </p>
 
 <div class="grid" style="margin-top:14px">
   <figure class="card">
-    <div class="thumb">[ trocar por screenshot ]<br>NASA Eyes on the Earth</div>
+    <div class="thumb">
+      <img src="ref-nasa-eyes.png" alt="NASA — Eyes on the Earth" onerror="this.remove()" />
+      <span class="thumb-cap">[ trocar por screenshot ]<br>NASA Eyes on the Earth</span>
+    </div>
     <div class="body">
       <span class="tag">Cockpit / dados orbitais</span>
       <h3>NASA — Eyes on the Earth</h3>
@@ -77,7 +89,10 @@
   </figure>
 
   <figure class="card">
-    <div class="thumb">[ trocar por screenshot ]<br>NASA Worldview / Copernicus Browser</div>
+    <div class="thumb">
+      <img src="ref-worldview.png" alt="NASA Worldview / Copernicus Browser" onerror="this.remove()" />
+      <span class="thumb-cap">[ trocar por screenshot ]<br>NASA Worldview / Copernicus Browser</span>
+    </div>
     <div class="body">
       <span class="tag">Earth Observation</span>
       <h3>Worldview · Copernicus Browser</h3>
@@ -87,7 +102,10 @@
   </figure>
 
   <figure class="card">
-    <div class="thumb">[ trocar por screenshot ]<br>SpaceX Dragon — console da tripulação</div>
+    <div class="thumb">
+      <img src="ref-spacex-dragon.png" alt="SpaceX Dragon — console da tripulação" onerror="this.remove()" />
+      <span class="thumb-cap">[ trocar por screenshot ]<br>SpaceX Dragon — console da tripulação</span>
+    </div>
     <div class="body">
       <span class="tag">Telemetria / missão</span>
       <h3>SpaceX — Console Dragon</h3>
@@ -97,7 +115,10 @@
   </figure>
 
   <figure class="card">
-    <div class="thumb">[ trocar por screenshot ]<br>Windy.com — mapa meteorológico</div>
+    <div class="thumb">
+      <img src="ref-windy.png" alt="Windy.com — mapa meteorológico" onerror="this.remove()" />
+      <span class="thumb-cap">[ trocar por screenshot ]<br>Windy.com — mapa meteorológico</span>
+    </div>
     <div class="body">
       <span class="tag">Mapa de calor</span>
       <h3>Windy.com</h3>
@@ -107,7 +128,10 @@
   </figure>
 
   <figure class="card">
-    <div class="thumb">[ trocar por screenshot ]<br>ESA / Mission Control dashboards</div>
+    <div class="thumb">
+      <img src="ref-esa-mission-control.png" alt="ESA / Mission Control dashboards" onerror="this.remove()" />
+      <span class="thumb-cap">[ trocar por screenshot ]<br>ESA / Mission Control dashboards</span>
+    </div>
     <div class="body">
       <span class="tag">Estado / alerta</span>
       <h3>Mission Control (ESA)</h3>
@@ -117,12 +141,16 @@
   </figure>
 
   <figure class="card">
-    <div class="thumb">[ trocar por screenshot ]<br>El calor detrás de la nube (Amenaza Roboto)</div>
+    <div class="thumb">
+      <img src="ref-el-calor.png" alt="El calor detrás de la nube (Amenaza Roboto)" onerror="this.remove()" />
+      <span class="thumb-cap">[ trocar por screenshot ]<br>El calor detrás de la nube (Amenaza Roboto)</span>
+    </div>
     <div class="body">
       <span class="tag">Projeto-base</span>
       <h3>El calor detrás de la nube</h3>
-      <p class="crit"><b>Adotamos:</b> a metodologia DiD e a narrativa de denúncia
-        ambiental. <b>Evitamos:</b> a apresentação puramente acadêmica — reposicionamos como missão.</p>
+      <p class="crit"><b>Adotamos:</b> a comparação térmica via satélite (datacenter ×
+        área verde) e a narrativa de denúncia ambiental. <b>Evitamos:</b> a apresentação
+        puramente acadêmica — reposicionamos como missão.</p>
     </div>
   </figure>
 </div>
@@ -135,7 +163,8 @@
   <div class="sw"><div class="chip" style="background:#16181d"></div><div class="lab">#16181D · cartão</div></div>
   <div class="sw"><div class="chip" style="background:#f0f0f0"></div><div class="lab" style="color:#222">#F0F0F0 · texto</div></div>
   <div class="sw"><div class="chip" style="background:#aeb6c2"></div><div class="lab" style="color:#222">#AEB6C2 · texto 2</div></div>
-  <div class="sw"><div class="chip" style="background:#ff6600"></div><div class="lab">#FF6600 · DC / acento</div></div>
+  <div class="sw"><div class="chip" style="background:#ff9800"></div><div class="lab">#FF9800 · acento de missão</div></div>
+  <div class="sw"><div class="chip" style="background:#ff6600"></div><div class="lab">#FF6600 · datacenter</div></div>
   <div class="sw"><div class="chip" style="background:#ffcc02"></div><div class="lab" style="color:#222">#FFCC02 · destaque</div></div>
   <div class="sw"><div class="chip" style="background:#00aa00"></div><div class="lab">#00AA00 · controle</div></div>
   <div class="sw"><div class="chip" style="background:#ff5a4d"></div><div class="lab">#FF5A4D · alerta</div></div>

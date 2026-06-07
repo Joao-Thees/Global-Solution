@@ -210,98 +210,6 @@ input[type="range"] {
 
 .slider-val { font-size: 11px; color: var(--text); min-width: 30px; text-align: right; }
 
-/* ─── Cards de resultados ─── */
-.result-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  margin-bottom: 8px;
-}
-
-.result-card h3 {
-  font-size: 11px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.site-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.anomaly-total {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  margin: 4px 0;
-}
-
-.anomaly-unit { font-size: 12px; color: var(--text-muted); font-weight: 400; }
-
-.breakdown { margin-top: 8px; }
-
-.breakdown-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-  font-size: 11px;
-}
-
-.breakdown-bar-wrap {
-  flex: 1;
-  height: 6px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.breakdown-bar {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.6s ease;
-}
-
-.breakdown-pct { min-width: 32px; text-align: right; color: var(--text-muted); }
-
-/* ─── Gráfico de série temporal ─── */
-#chart-container {
-  width: 100%;
-  height: 160px;
-  margin-top: 4px;
-  position: relative;
-}
-
-#chart-container canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* ─── Stats gerais ─── */
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.stat-item {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 8px 10px;
-}
-
-.stat-value { font-size: 16px; font-weight: 700; color: var(--text); }
-.stat-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
 /* ─── Período indicator ─── */
 .period-pill {
   display: inline-block;
@@ -475,8 +383,10 @@ input[type="range"] {
   font-weight: 700;
   border-bottom: none;
 }
+/* destaque bem leve só na linha do delta a cada leitura — antes piscava forte
+   nas três linhas e cansava a vista */
 .tlm-flash { animation: tlmflash 0.6s ease; }
-@keyframes tlmflash { 0% { background: rgba(255,152,0,0.25); } 100% { background: transparent; } }
+@keyframes tlmflash { 0% { background: rgba(255,152,0,0.12); } 100% { background: transparent; } }
 
 .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 .dot-dc    { background: #ff6600; }
@@ -511,6 +421,7 @@ input[type="range"] {
   padding: 12px;
   background: rgba(255,255,255,0.03);
 }
+.control-hint { font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
 .form-title { font-size: 11px; color: var(--text); margin-bottom: 8px; }
 .form-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .form-row label { font-size: 11px; color: var(--text-muted); flex: 1; }
@@ -573,7 +484,6 @@ input[type="range"] {
 .methodology strong { color: var(--text); }
 .methodology code { font-size: 10px; color: var(--accent); }
 .methodology a, #attribution a, .mission-brief a { color: var(--accent); text-decoration: none; }
-#results-container { margin-top: 10px; }
 
 /* ─── Responsivo: tablets e celulares ─── */
 /* Tablets em pé e telas médias: painel um pouco mais estreito */
@@ -620,8 +530,6 @@ input[type="range"] {
   #attribution { padding: 10px 13px; }
 
   #panel-header h1 { font-size: 13px; }
-  .anomaly-total { font-size: 20px; }
-  .stat-value { font-size: 15px; }
 
   /* alvos de toque maiores nos controles */
   .layer-toggle { margin-bottom: 12px; }

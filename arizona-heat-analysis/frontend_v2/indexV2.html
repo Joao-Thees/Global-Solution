@@ -11,9 +11,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
 
@@ -64,7 +61,6 @@
         <a href="#sec-telemetria">Telemetria</a>
         <a href="#sec-camadas">Camadas</a>
         <a href="#sec-controles">Controles</a>
-        <a href="#sec-resultados">Resultados</a>
       </nav>
     </header>
 
@@ -113,13 +109,19 @@
       <p class="status-line">
         Veredito:
         <span id="thermal-status" class="status-pill status-ok" aria-live="assertive">—</span>
-        <span class="muted">(limiar: <span id="threshold-label">+4.0</span> °C)</span>
+        <span class="muted">(limiar: <span id="threshold-label">+4.5</span> °C)</span>
       </p>
     </section>
 
     <!-- ───── CONTROLES (botões + formulário com validação) ───── -->
     <section id="sec-controles" class="section" aria-labelledby="h-controles">
       <h2 id="h-controles" class="section-title">Controles da missão</h2>
+
+      <p class="control-hint">
+        A estação recebe uma leitura simulada a cada poucos segundos. Use os botões
+        para forçar uma leitura, religar a conexão ou armar/desarmar a vigilância, e
+        o campo abaixo para definir a partir de qual diferença (°C) entra o alerta.
+      </p>
 
       <div class="btn-row">
         <button type="button" id="btn-scan" class="btn btn-primary">Forçar varredura</button>
@@ -132,7 +134,7 @@
         <div class="form-row">
           <label for="threshold-input">Limiar Δ seguro (°C)</label>
           <input type="number" id="threshold-input" name="threshold"
-                 min="0" max="20" step="0.1" value="4.0"
+                 min="0" max="20" step="0.1" value="4.5"
                  inputmode="decimal" aria-describedby="threshold-help threshold-error" required />
         </div>
         <p id="threshold-help" class="form-help">
@@ -193,29 +195,14 @@
       </ul>
     </section>
 
-    <!-- ───── RESULTADOS ───── -->
-    <section id="sec-resultados" class="section" aria-labelledby="h-resultados">
-      <h2 id="h-resultados" class="section-title">Resultados v2</h2>
-      <div id="stats-general"></div>
-      <div id="results-container"></div>
-    </section>
-
-    <!-- ───── SÉRIE TEMPORAL ───── -->
-    <section class="section" id="chart-section" hidden aria-labelledby="h-chart">
-      <h2 id="h-chart" class="section-title">Série temporal IHI</h2>
-      <div id="chart-container">
-        <canvas id="time-chart" role="img"
-                aria-label="Gráfico de linha da anomalia IHI por ano para datacenter e área verde"></canvas>
-      </div>
-    </section>
-
-    <!-- ───── METODOLOGIA ───── -->
+    <!-- metodologia -->
     <section class="section" aria-labelledby="h-metodo">
       <h2 id="h-metodo" class="section-title">Metodologia v2</h2>
       <div class="methodology">
-        <strong>Modelo:</strong> Diferenças em diferenças<br />
-        <code>ihi ~ ndvi + ndbi + zone×trat + trat×period</code><br /><br />
-        <strong>Satélites:</strong> Landsat 8 (2020–2025) + Landsat 9 (2022–2026)<br />
+        <strong>Análise:</strong> comparação da temperatura de superfície (LST) média de
+        2025 entre o datacenter CyrusOne Phoenix e a área verde de controle, a partir
+        das cenas Landsat.<br /><br />
+        <strong>Satélites:</strong> Landsat 8 + Landsat 9<br />
         <strong>Fundo:</strong> RGB GEE — Landsat 9 mediana 2024–2025<br />
         <strong>Resolução:</strong> 30 m/pixel<br /><br />
         Baseado no
@@ -236,7 +223,6 @@
 
 <div id="map-tip" role="tooltip">CyrusOne Phoenix Datacenter — Análise V2 (2020–2026)</div>
 
-<script src="js/chartsV2.js"></script>
 <script src="js/mainV2.js"></script>
 <script src="js/telemetryV2.js"></script>
 </body>

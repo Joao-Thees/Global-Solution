@@ -26,14 +26,16 @@ python arizona-heat-analysis/python/generate_background.py # RGB background v2
 ```
 
 **Servir o frontend:**
-```powershell
-cd arizona-heat-analysis/frontend
-python -m http.server 8765
-# http://localhost:8765
 
-cd arizona-heat-analysis/frontend_v2
+Sirva a partir da raiz `arizona-heat-analysis` (NÃO de dentro de `frontend_v2`), pois o
+frontend busca os dados em `../data/...`. Iniciar o servidor dentro de `frontend_v2` faz
+o `python -m http.server` bloquear o acesso a `../data` (path traversal acima da raiz),
+e o mapa fica preto / com 404 nos PNGs e JSONs.
+
+```powershell
+cd arizona-heat-analysis
 python -m http.server 8766
-# http://localhost:8766
+# Acesse: http://localhost:8766/frontend_v2/indexV2.html
 ```
 
 ## Arquitetura

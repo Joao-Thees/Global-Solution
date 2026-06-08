@@ -159,7 +159,7 @@ def main():
     render_png(data, vmin, vmax, out_png)
     save_bounds(bounds, out_bounds)
 
-    print("\n  Pronto. Abra frontend_v2/indexV2.html no navegador.")
+    print("\n  Pronto. Abra http://localhost:8766/frontend_v2/indexV2.html no navegador. ")
 
 
 if __name__ == "__main__":

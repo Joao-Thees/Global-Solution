@@ -66,7 +66,7 @@ def main():
     print("  Pipeline v2 concluído.")
     print("  Modelo    : arizona-heat-analysis/data/results_v2.json")
     print("  Relatório : arizona-heat-analysis/data/relatorio_v2.pdf")
-    print("  Frontend  : cd frontend_v2 && python -m http.server 8766")
+    print("  Frontend  : cd arizona-heat-analysis && python -m http.server 8766")
     print("=" * 60)
 
 

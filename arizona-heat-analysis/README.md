@@ -6,7 +6,7 @@ Corrobora os achados de [techxplore.com/news/2026-05-centers-nearby-temperatures
 
 ---
 
-## Dados pesados (TIF) — download obrigatório
+## Dados pesados (TIF) — DOWNLOAD OBRIGATÓRIO.
 
 Os arquivos GeoTIFF não estão no repositório (tamanho > 100 MB). Baixe o `.zip` no link abaixo e extraia o conteúdo dentro de `data/gee_exports_v2/`:
 
@@ -21,7 +21,7 @@ data/gee_exports_v2/
 └── rgb_background.tif     # imagem RGB Sentinel-2 (fundo do mapa)
 ```
 
-> Os CSVs (`dados_sat_v2.csv`, `reflst_v2.csv`) já estão no repositório.
+> Os CSVs (`dados_sat_v2.csv`, `reflst_v2.csv`) já estão no repositório, são leves e o git os suporta.
 
 ---
 
@@ -44,10 +44,12 @@ cd arizona-heat-analysis/python
 python main.py
 ```
 
+`main.py` é o **ponto de entrada único** e o **motor analítico** do projeto.
 Executa em sequência:
-1. `generate_report_v2.py` → `data/relatorio_v2.pdf` (LST 2025: datacenter vs área verde)
-2. `generate_heatmap_v2.py` → `data/heatmap_v2.png` (mapa de calor Landsat)
-3. `generate_background.py` → `data/rgb_background.png` (fundo Sentinel-2 para o mapa)
+1. `analysis_v2.py` → `data/results_v2.json` (modelo DiD: decompõe a anomalia térmica)
+2. `generate_report_v2.py` → `data/relatorio_v2.pdf` (LST 2025: datacenter vs área verde)
+3. `generate_heatmap_v2.py` → `data/heatmap_v2.png` (mapa de calor Landsat)
+4. `generate_background.py` → `data/rgb_background.png` (fundo Sentinel-2 para o mapa)
 
 ### Visualizar no navegador
 
@@ -60,7 +62,10 @@ python -m http.server 8766
 # Acesse: http://localhost:8766/frontend_v2/indexV2.html
 ```
 
-### Ferramenta DiD (opcional)
+### Rodar só o modelo DiD (opcional)
+
+O `python main.py` já roda o modelo. Para executar **apenas** o motor analítico
+(sem gerar PDF/mapas), o `analysis_v2.py` continua funcionando isolado:
 
 ```powershell
 python arizona-heat-analysis/python/analysis_v2.py
@@ -113,6 +118,64 @@ ihi ~ ndvi + ndbi + C(zone)*C(trat) + C(trat)*C(period)
 - Coeficiente-chave: `C(trat)[T.True]:C(period)[T.ops]`
 
 **Dados:** Landsat 8/9 (30 m) via módulo `sofiaermida/landsat_smw_lst` no GEE.
+
+---
+
+## Computational Thinking with Python (CTWP) — documentação da entrega
+
+Tema: **o "Centro de Controle" da missão** — o motor analítico em Python que
+ingere os dados orbitais (LST do Landsat via GEE), aplica as regras de análise e
+gera o relatório e os resultados do modelo. Conexão espacial: **Observação da
+Terra (Earth Observation)**.
+
+### Problema analítico
+A partir de cenas Landsat de Phoenix (AZ), medir **quanto o datacenter CyrusOne
+Phoenix aquece a superfície** em relação a uma área verde de controle e estimar
+**quanto desse calor vem da operação dos servidores** (e não de mudança de
+cobertura do solo ou da tendência regional).
+
+### Como executar
+```powershell
+cd arizona-heat-analysis/python
+python main.py
+```
+`main.py` é o **motor analítico** (ponto de entrada único): roda o modelo DiD
+(`analysis_v2.py`) e depois gera relatório, mapa de calor e fundo RGB.
+
+### Formato dos dados consumidos
+`data/gee_exports_v2/dados_sat_v2.csv` — uma linha por cena Landsat / zona / ano:
+
+| coluna | tipo | descrição |
+|---|---|---|
+| `lst`  | float | temperatura de superfície (Kelvin) |
+| `ndvi` | float | índice de vegetação |
+| `ndbi` | float | índice de área construída |
+| `year` | int   | ano da cena |
+| `sat`  | texto | satélite (L8 / L9) |
+| `zone` | texto | sitio / inner / outer |
+| `site` | texto | cyrusone / area_verde |
+| `trat` | texto | dc (tratamento) / green (controle) |
+
+`reflst_v2.csv` — `year, sat, ref2` (temperatura de referência regional do ano).
+
+### Onde cada requisito da CTWP aparece
+- **Estruturas de dados:** dicionários e tuplas em `config.py` (`SITES`,
+  `PERIODS_V2`), dicts de saída em `analysis_v2.py` e `generate_report_v2.py`,
+  listas em todo o código.
+- **Modularização (funções):** cada script separa ingestão / análise / exibição
+  (ex.: `load_data` → `run_model` → `export_results`).
+- **Lógica (laços e condicionais):** `for`/list comprehensions e `if/elif/else`
+  (ex.: `classify_period`, decomposição da anomalia).
+- **Tratamento de erros:** `try/except` na leitura de CSV/TIF e na escrita de
+  arquivos, evitando interrupções bruscas por dados inválidos.
+- **Uso de IA:** documentado em [`python/prompts.md`](python/prompts.md), com as
+  perguntas feitas ao Claude e a explicação da lógica (IHI e DiD) que a equipe domina.
+
+### Conceitos-chave (resumo; detalhes em `python/prompts.md`)
+- **IHI** = `LST_local − ref2`: o quanto um ponto está mais quente que a média
+  regional do mesmo ano.
+- **DiD (Diferenças-em-Diferenças):** isola o efeito causal da operação comparando
+  `(datacenter depois − antes) − (área verde depois − antes)`.
 
 ---
 

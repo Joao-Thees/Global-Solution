@@ -233,3 +233,52 @@ AttributeError: module 'matplotlib' has no attribute 'image'
   alterações necessarias para que a partir desses 2 novos arquivos KML, gere-se um relatório mais especifico da temperatura da NOVA
   DEMARCAÇÃO DATACENTER (que está dentro da região magenta) e da temperatura da NOVA DEMARCAÇÃO ÁREA VERDE (que tambem vai estar dentro da
   área magenta). Pergunte algo se achar necessário. Se entendeu, explique me antes de fazer qualquer coisa qual é a minha ideia.
+
+---
+
+## Justificativa do uso de IA e adaptações da equipe
+
+O Claude (Opus 4.8) foi usado como **copiloto de desenvolvimento**, nunca como autor único. O fluxo da equipe foi:
+
+1. **Pedir orientação, não código pronto** — ver [002] ("não faça por mim, me oriente"). As decisões de modelagem (analisar antes/depois, períodos pré vs ops, escolha dos sites de tratamento e controle) partiram da equipe.
+2. **Entender cada peça antes de aceitar** — ver [004], [008], [012], [013], [036] (perguntas sobre GeoTIFF, numpy, o operador `~`, o que é DiD). Só incorporamos código depois de entender a lógica.
+3. **Corrigir e validar resultados** — ver [009], [010], [020]: a equipe rodou, achou números estranhos (ex.: diferença de 4,833 K) e questionou a IA até a causa ficar clara.
+4. **Redirecionar a metodologia** — ver [023], [026]: a virada de "anomalia 2000–2025" para "pré (2020–22) vs ops (2024–26)" + imagem de fundo recente foi decisão da equipe.
+
+Principais adaptações da equipe sobre o que a IA sugeriu: troca do recorte temporal, redução dos sites para apenas CyrusOne (tratamento) e Área Verde (controle), e a opção consciente de manter a área verde como controle mesmo sabendo do risco de contaminação térmica por estar próxima (ver [038]).
+
+## A lógica que sabemos explicar
+
+### IHI — Intensidade de Ilha de Calor
+`IHI = LST_local − ref2`
+
+- `LST_local` = temperatura de superfície (Land Surface Temperature) do site, em Kelvin, derivada das cenas Landsat no GEE.
+- `ref2` = temperatura média de referência regional **daquele ano** (`reflst_v2.csv`).
+
+O IHI mede **quanto um ponto está mais quente que a média da sua própria região no mesmo ano**. Subtrair a referência anual remove o efeito de "uns anos serem mais quentes que outros" — sobra o excesso de calor local. No código: `analysis_v2.load_data()` faz `dados["ihi"] = dados["lst"] - dados["ref2"]`.
+
+### DiD — Diferenças-em-Diferenças
+É um método de **inferência causal**. Para saber se a OPERAÇÃO do datacenter esquentou a região, não basta comparar datacenter vs área verde (já são diferentes por natureza) nem antes vs depois (a região toda pode ter esquentado). O DiD compara **as duas diferenças ao mesmo tempo**:
+
+```
+efeito = (DC_depois − DC_antes) − (Verde_depois − Verde_antes)
+```
+
+- `DC_antes/depois` = IHI do datacenter no período pré (2020–22) e ops (2024–26).
+- `Verde_antes/depois` = o mesmo para a área verde (controle).
+
+Se o datacenter subiu mais que o controle, essa "diferença das diferenças" é o **efeito atribuível à operação**, separado da tendência regional. No modelo, é o coeficiente da interação `C(trat)[T.True]:C(period)[T.ops]` (no output [042], +1,812 K).
+
+Modelo completo (`analysis_v2.run_model()`):
+```
+ihi ~ ndvi + ndbi + C(zone)*C(trat) + C(trat)*C(period)
+```
+controla também por vegetação (`ndvi`), área construída (`ndbi`) e zona (sítio/inner/outer) para isolar melhor o efeito.
+
+### Decomposição (`analysis_v2.decompose_anomaly`)
+A anomalia total (pré→ops) é separada em 3 parcelas:
+- **c_terreno** — mudança de cobertura do solo (via `ndvi`/`ndbi`);
+- **c_geral** — tendência regional (coeficiente do período);
+- **c_operacao** — o efeito causal da operação dos servidores (a interação do DiD).
+
+> Ressalva técnica que reconhecemos: no output [042] o coeficiente da operação tem p-valor 0,167 (não significativo a 5%) e o modelo acusa multicolinearidade. Ou seja, com os dados atuais o efeito é **sugestivo, não conclusivo** — é uma limitação assumida, não um erro de código.

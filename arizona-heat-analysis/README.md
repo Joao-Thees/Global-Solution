@@ -53,6 +53,10 @@ Executa em sequência:
 
 ### Visualizar no navegador
 
+> ⚠️ Rode `python main.py` **antes** de abrir o frontend — o PDF e os PNGs
+> (`heatmap_v2.png`, `rgb_background.png`) não vêm no repositório, são gerados
+> pelo pipeline.
+
 Sirva a partir da raiz `arizona-heat-analysis` (NÃO de dentro de `frontend_v2`), pois o
 frontend busca os dados em `../data/...`:
 

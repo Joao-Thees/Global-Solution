@@ -103,7 +103,7 @@ frontend busca os dados em `../data/...`:
 ```powershell
 cd LandLytics
 python -m http.server 8766
-# Acesse: http://localhost:8766/frontend_v2/indexV2.html
+# Acesse: http://localhost:8766/frontend_v2/   (entra pelo globo e segue o fluxo: globo -> mapa EUA -> painel Phoenix)
 ```
 
 ### Rodar só o modelo DiD (opcional)

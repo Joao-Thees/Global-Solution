@@ -1,0 +1,408 @@
+/* Mapa nacional dos Estados Unidos com os data centers e o conteudo de impacto.
+   Estrutura inspirada no Baxtel, repintada com a paleta do moodboard.html. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Paleta e forma vêm de css/tokens.css (carregado antes). Sem :root local. */
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+}
+body { overflow: hidden; }
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 1200;
+  background: var(--accent);
+  color: #000;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 13px;
+}
+.skip-link:focus { left: 8px; }
+
+:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+a { color: var(--accent); }
+
+/* Estrutura: painel lateral rolavel + mapa que ocupa o resto */
+.app-shell {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ----- Painel lateral ----- */
+.sidebar {
+  background: linear-gradient(180deg, #16181d 0%, #0d0d0d 100%);
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+/* Marca com a logo do projeto (Logo.png na raiz de LandLytics), formato paisagem */
+.brand-mark {
+  height: 46px;
+  display: flex;
+  align-items: center;
+}
+.brand-mark img {
+  height: 46px;
+  width: auto;
+  display: block;
+  border-radius: 6px;
+  object-fit: contain;
+}
+.brand h1 { font-size: 18px; font-weight: 800; }
+.brand p { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: color 0.2s ease;
+}
+.back-link:hover { color: var(--accent); }
+
+.hero-card {
+  background:
+    radial-gradient(circle at top right, rgba(255,102,0,0.18), transparent 42%),
+    var(--card-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.eyebrow {
+  color: var(--accent2);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+}
+.hero-card h2 { margin-top: 8px; font-size: 20px; font-weight: 800; line-height: 1.15; }
+.hero-card p { margin-top: 9px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+/* Titulos de secao do painel */
+.section-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin: 22px 0 11px;
+}
+
+/* Controles de filtro */
+.controls { display: grid; gap: 10px; }
+.controls label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.controls input,
+.controls select {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #0b0b0b;
+  color: var(--txt);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+.controls input:focus,
+.controls select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,152,0,0.16);
+}
+
+.toggle-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.toggle-row label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #0b0b0b;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.toggle-row input { width: auto; accent-color: var(--accent); }
+
+.range-row label { display: block; margin-bottom: 6px; }
+.range-row input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+/* Tres metricas resumo (lista, sem marcadores) */
+.metrics {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+.metrics li {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 11px 10px;
+}
+.metrics strong {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--accent2);
+  font-variant-numeric: tabular-nums;
+}
+.metrics span { display: block; color: var(--dim); font-size: 10.5px; margin-top: 3px; }
+
+/* Ranking de hotspots */
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-head .section-title { margin-bottom: 0; }
+.reset-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--txt);
+  background: rgba(255,152,0,0.14);
+  border: 1px solid rgba(255,152,0,0.4);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.reset-btn:hover { background: rgba(255,152,0,0.24); }
+
+.rank-list { list-style: none; display: grid; gap: 8px; margin-top: 11px; }
+.rank-item {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.035);
+  border-radius: var(--radius);
+  padding: 11px;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+.rank-item:hover { border-color: var(--accent); transform: translateY(-1px); }
+.rank-item.is-entry { border-color: rgba(255,204,2,0.5); }
+.rank-item strong { display: block; font-size: 13px; }
+.rank-item span { display: block; color: var(--muted); font-size: 11.5px; margin-top: 3px; }
+
+/* Cartoes de impacto, no espirito de catalogo do Baxtel */
+.impact-grid { display: grid; gap: 10px; }
+.impact-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 13px 14px;
+}
+.impact-card h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.impact-card .ico { font-size: 15px; }
+.impact-card p { margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.impact-card .src { margin-top: 7px; font-size: 10.5px; color: var(--dim); }
+.impact-card .src a { color: var(--accent); }
+
+.footer-note {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: var(--dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ----- Area do mapa ----- */
+.map-area { position: relative; min-width: 0; }
+#map { position: absolute; inset: 0; background: #07080a; }
+
+/* Mensagem exibida quando o token do Mapbox não está configurado */
+.map-config-msg {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.map-config-msg code {
+  color: var(--accent);
+  font-size: 13px;
+  background: rgba(255,255,255,0.06);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Barra superior sobre o mapa */
+.topbar {
+  position: absolute;
+  top: 16px; left: 16px; right: 16px;
+  z-index: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(13,13,13,0.78);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius);
+  padding: 11px 16px;
+  pointer-events: none;
+}
+.topbar strong { display: block; font-size: 14px; }
+.topbar span { color: var(--muted); font-size: 11.5px; }
+
+.legend { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.legend small { color: var(--muted); font-size: 11px; }
+.legend .grad {
+  display: inline-block;
+  width: 120px;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00aa00, #ffcc02, #ff9800, #ff5a4d);
+}
+
+/* Marcadores HTML dos data centers */
+.dc-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--dc);
+  border: 2px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 0 5px rgba(255,102,0,0.16), 0 0 16px rgba(255,102,0,0.7);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dc-marker:hover {
+  transform: scale(1.35);
+  box-shadow: 0 0 0 7px rgba(255,152,0,0.22), 0 0 22px rgba(255,152,0,0.9);
+}
+
+/* Marcador de Phoenix: porta de entrada, amarelo com anel pulsando */
+.dc-marker.entry {
+  background: var(--accent2);
+  box-shadow: 0 0 0 5px rgba(255,204,2,0.2), 0 0 18px rgba(255,204,2,0.85);
+}
+.dc-marker.entry::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--accent2);
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { transform: scale(0.7); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Etiqueta flutuante de Phoenix indicando que leva ao satelite */
+.entry-flag {
+  position: absolute;
+  left: 22px;
+  top: -10px;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #000;
+  background: var(--accent2);
+  border-radius: 4px;
+  padding: 3px 7px;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Popup do Mapbox repintado com o tema escuro */
+.mapboxgl-popup-content {
+  background: var(--card) !important;
+  color: var(--txt) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius) !important;
+  padding: 13px 15px !important;
+  font-family: 'Inter', sans-serif;
+}
+.mapboxgl-popup-tip {
+  border-top-color: var(--card) !important;
+  border-bottom-color: var(--card) !important;
+}
+.mapboxgl-popup-close-button { color: var(--muted) !important; font-size: 16px; }
+.dc-popup h3 { font-size: 14px; font-weight: 700; margin-bottom: 7px; }
+.dc-popup p { font-size: 12px; color: var(--muted); margin: 3px 0; }
+.dc-popup p strong { color: var(--txt); }
+.dc-popup .badge {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #000;
+  background: var(--accent);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+/* ----- Responsividade ----- */
+@media (max-width: 1024px) {
+  .app-shell { grid-template-columns: 330px 1fr; }
+}
+@media (max-width: 768px) {
+  body { overflow: auto; }
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 52vh auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  .map-area { order: 1; min-height: 52vh; }
+  .sidebar { order: 2; border-right: 0; border-top: 1px solid var(--border); overflow: visible; }
+  .topbar { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .sidebar { padding: 16px; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+  .hero-card h2 { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dc-marker.entry::after { animation: none; }
+  .rank-item:hover, .dc-marker:hover { transform: none; }
+}

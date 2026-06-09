@@ -1,0 +1,33 @@
+/* ============================================================
+   tokens.css — Design System do LandLytics (fonte única).
+   Carregado ANTES do CSS de cada tela. Centraliza a paleta e a
+   forma; tokens específicos de uma tela (ex.: --panel-w) ou com
+   valor próprio (ex.: --radius do painel V2) ficam no CSS da tela.
+   Cores conforme o moodboard / brief (WCAG AA sobre #0D0D0D).
+   ============================================================ */
+
+:root {
+  /* ---- Superfícies / fundo ---- */
+  --bg:        #0d0d0d;              /* fundo base (brief) */
+  --card:      #16181d;              /* superfície de cartão */
+  --card-2:    #1c1f25;             /* superfície elevada */
+  --panel-bg:  rgba(13, 13, 13, 0.92);
+  --border:    rgba(255, 255, 255, 0.14);
+
+  /* ---- Texto (dois aliases de nome, mesmo valor, p/ compatibilidade entre telas) ---- */
+  --txt:       #f0f0f0;  --text:        #f0f0f0;   /* texto primário */
+  --muted:     #aeb6c2;  --text-muted:  #aeb6c2;   /* texto secundário (AA) */
+  --dim:       #8e96a3;  --text-dim:    #8e96a3;   /* texto terciário (AA) */
+
+  /* ---- Cores de missão / estado ---- */
+  --accent:    #ff9800;             /* acento de missão */
+  --dc:        #ff6600;             /* destaque data center */
+  --accent2:   #ffcc02;             /* atenção / destaque */
+  --green:     #00aa00;             /* nominal */
+  --ok:        #29c267;             /* nominal (variante do painel V2) */
+  --danger:    #ff5a4d;             /* alerta */
+  --danger-bg: #3a1410;             /* fundo de alerta */
+
+  /* ---- Forma ---- */
+  --radius:    8px;
+}

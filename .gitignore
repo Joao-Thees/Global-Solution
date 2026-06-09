@@ -9,5 +9,15 @@ __pycache__/
 .venv/
 .env
 
+# Segredo do Mapbox: config.js é gerado por python/main.py (os.getenv MAPBOX_TOKEN).
+# Use frontend_v2/js/config.example.js como modelo. NÃO versionar o config.js real.
+LandLytics/frontend_v2/js/config.js
+
 # Git interno temporário
 .git_backup/
+
+# Configurações de editor / SO (não fazem parte do projeto)
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

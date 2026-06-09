@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LandLytics - Observacao Orbital de Data Centers</title>
+  <meta name="description"
+        content="Portal de entrada do LandLytics: um globo 3D da Terra e uma analise sobre o
+                 impacto ambiental dos data centers, com acesso ao painel de satelite de Phoenix." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/landing.css" />
+  <link rel="stylesheet" href="css/mission-header.css" />
+</head>
+<body>
+
+<a href="#hero" class="skip-link">Pular para o conteudo</a>
+
+<!-- tela de carregamento enquanto o globo monta -->
+<div id="loading" role="status" aria-live="polite">
+  <div class="spinner" aria-hidden="true"></div>
+</div>
+
+<!-- o globo 3D ocupa o fundo inteiro da tela -->
+<div id="globe" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="mc-header" role="banner">
+  <!-- registro de canto (estética de instrumento) -->
+  <span class="mc-tick mc-tick--tl" aria-hidden="true"></span>
+  <span class="mc-tick mc-tick--tr" aria-hidden="true"></span>
+
+  <!-- faixa de telemetria superior -->
+  <div class="mc-telemetry">
+    <div class="mc-tel-group">
+      <span class="mc-status mc-status--nominal">
+        <span class="mc-led" aria-hidden="true"></span>
+        Sistema Nominal
+      </span>
+      <span class="mc-tel-item">
+        <span class="mc-tel-label">Missão</span>
+        <span class="mc-tel-val">LANDLYTICS PHX DC 01</span>
+      </span>
+    </div>
+
+    <div class="mc-tel-group mc-tel-group--right">
+      <span class="mc-tel-item">
+        <span class="mc-tel-label">Satélite</span>
+        <span class="mc-tel-val">Landsat 8 / 9</span>
+      </span>
+      <span class="mc-tel-item">
+        <span class="mc-tel-label">Alvo</span>
+        <span class="mc-tel-val">33.2704°N&nbsp;111.8821°W</span>
+      </span>
+      <span class="mc-tel-item">
+        <span class="mc-tel-label">ΔLST</span>
+        <span class="mc-tel-val mc-tel-val--dc">+4.2&nbsp;°C</span>
+      </span>
+      <span class="mc-tel-item">
+        <span class="mc-tel-label">Brasília</span>
+        <span class="mc-tel-val" id="mc-utc">--:--:--</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- linha principal -->
+  <div class="mc-main">
+    <div class="mc-brand">
+      <span class="mc-logo"><img src="assets/Logo.png" alt="Logo do LandLytics" /></span>
+      <span class="mc-brand-sep" aria-hidden="true"></span>
+      <div class="mc-titles">
+        <span class="mc-eyebrow">Centro de Operações de Observação da Terra</span>
+        <h1 class="mc-title">Missão Espacial de Observação de Ilhas de Calor Geradas por Data Centers via Tecnologias Espaciais</h1>
+        <p class="mc-subtitle">Monitoramento do impacto térmico de data centers por meio da análise de temperatura da superfície terrestre (LST) derivada de satélite.</p>
+      </div>
+    </div>
+
+    <div class="mc-actions">
+      <span class="mc-mode">
+        <span class="mc-mode-label">Modo Operacional</span>
+        <span class="mc-mode-badge">
+          <span class="mc-mode-led" aria-hidden="true"></span>
+          Monitoramento Ativo
+        </span>
+      </span>
+
+      <nav class="mc-nav" aria-label="Navegação da missão">
+        <a href="usa.html">Mapa EUA</a>
+        <a href="indexV2.html">Painel Phoenix</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- banner de alerta -->
+  <div class="mc-alert" role="status" aria-live="polite">
+    <span class="mc-alert-tag">
+      <span class="mc-alert-led" aria-hidden="true"></span>
+      Alerta Térmico
+    </span>
+    <p class="mc-alert-text">
+      Anomalia detectada em <b>Phoenix, AZ</b> — superfície <b>+4.2&nbsp;°C</b> acima das áreas verdes adjacentes, ultrapassando o limiar seguro.
+    </p>
+    <span class="mc-alert-meta">Atualizado há 2&nbsp;min · órbita 248</span>
+  </div>
+</header>
+
+<main id="hero" class="hero">
+  <div class="hero-inner">
+    <span class="kicker">Console de observação da Terra</span>
+    <h2>O Peso Invisível da Era Digital</h2>
+    <p class="lead">
+      Todos os dias, <b>bilhões de pessoas</b> enviam mensagens, assistem vídeos,
+      armazenam arquivos na nuvem e utilizam inteligência artificial sem perceber a
+      <b>infraestrutura gigantesca</b> que torna tudo isso possível: os <b>Data Centers</b>.
+    </p>
+    <p class="scroll-cue" aria-hidden="true">Role para ler a análise &darr;</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="usa.html">
+        Explorar o mapa dos EUA <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <a class="btn btn-ghost" href="indexV2.html">Ver analise de Phoenix</a>
+    </div>
+
+    <ul class="stats">
+      <li class="stat">
+        <strong>+4&deg;C</strong>
+        <span>Observados em análise · LST em data centers de Phoenix.</span>
+      </li>
+      <li class="stat">
+        <strong>2020&ndash;2026</strong>
+        <span>Série Landsat analisada.</span>
+      </li>
+    </ul>
+  </div>
+</main>
+
+<!-- texto longo da analise: cada paragrafo e um card que rola sobre o globo fixo -->
+<article class="story" id="story" aria-labelledby="story-title">
+
+  <h2 id="story-title" class="visually-hidden">Análise: o peso invisível da era digital</h2>
+
+  <div class="text-card">
+    <p>
+      Nesta análise via satélites <b>Landsat 8/9</b>, foram mapeados <b>5 grandes data centers</b>
+      nos Estados Unidos, sendo um deles analisado com <b>dados estatísticos reais</b> obtidos por
+      meio do <b>Google Earth Engine</b>, satélites Landsat 8/9 e do algoritmo SWM de Sofia Ermida
+      (módulo sofiaermida/landsat_smw_lst). Todos esses 5 datacenters juntos totalizam em operação <b>211 MW</b> de potência elétrica instalada.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>Para compreender a dimensão desse número:</p>
+    <ul class="card-list">
+      <li><b>211 MW</b> são suficientes para abastecer aproximadamente <b>175 mil residências</b> simultaneamente.</li>
+      <li>Essa quantidade de energia equivale ao consumo elétrico de <b>uma cidade inteira de porte médio</b>.</li>
+      <li>Em apenas <b>24 horas</b>, esses data centers podem consumir energia suficiente para atender <b>centenas de milhares de famílias</b>.</li>
+    </ul>
+  </div>
+
+  <div class="text-card highlight">
+    <p>Mas o impacto vai muito além da <b>eletricidade</b>.</p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      Os data centers são o <b>alicerce invisível</b> da economia digital moderna. Eles sustentam
+      serviços de streaming, armazenamento em nuvem, redes sociais, sistemas financeiros e, cada vez
+      mais, modelos avançados de <b>Inteligência Artificial</b>. Entretanto, essa transformação
+      digital possui um <b>custo ambiental</b> frequentemente subestimado.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      Grande parte da energia consumida pelos servidores é convertida em <b>calor</b>. Para evitar
+      falhas operacionais, enormes sistemas de resfriamento precisam funcionar ininterruptamente,
+      aumentando ainda mais a demanda energética. Em regiões com alta concentração dessas instalações,
+      pesquisadores já observam a formação de <b>ilhas de calor tecnológicas</b>, fenômeno semelhante
+      ao encontrado em grandes centros urbanos.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      Estudos recentes indicam que áreas próximas a grandes centros de dados podem registrar
+      <b>aumentos significativos de temperatura local</b>, em alguns casos chegando a
+      <b>vários graus Celsius</b> acima das regiões vizinhas. Esse calor adicional pode alterar
+      microclimas, influenciar padrões de umidade e aumentar a necessidade de climatização em
+      edificações próximas, criando um <b>ciclo contínuo de consumo energético</b>.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      O crescimento acelerado da <b>Inteligência Artificial</b> intensifica ainda mais esse desafio.
+      A cada nova geração de modelos, a demanda por processamento computacional aumenta
+      <b>exponencialmente</b>, exigindo infraestruturas cada vez maiores, mais potentes e mais
+      intensivas em energia. O resultado é uma <b>expansão global sem precedentes</b> do número e da
+      capacidade dos data centers.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      Os <b>211 MW</b> identificados neste estudo representam apenas uma pequena amostra de uma
+      infraestrutura mundial que cresce em ritmo acelerado. Atrás de cada busca, vídeo assistido,
+      comando de IA ou arquivo armazenado existe uma <b>cadeia energética complexa</b>, composta por
+      milhares de servidores operando <b>24 horas por dia, 7 dias por semana</b>.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      Além dos impactos energéticos e térmicos, o setor enfrenta desafios relacionados ao
+      <b>uso de recursos naturais</b>, à necessidade crescente de sistemas de refrigeração e à busca
+      por <b>fontes de energia mais sustentáveis</b> para suportar a transformação digital global.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      Nesse contexto, o projeto <b>LandLytics</b> não apenas monitora e analisa esses impactos por
+      meio de sensoriamento remoto e dados satelitais, mas também propõe soluções inovadoras. Entre
+      elas está o desenvolvimento de um <b>sistema de hardware embarcado</b> voltado ao resfriamento
+      de <b>Data Centers Espaciais (Space-Based Data Centers)</b>, explorando novas abordagens para
+      reduzir a dependência de sistemas convencionais de climatização e mitigar os efeitos ambientais
+      da computação em larga escala.
+    </p>
+  </div>
+
+  <div class="text-card">
+    <p>
+      O desafio da próxima década não será apenas armazenar mais dados ou treinar modelos mais
+      avançados de Inteligência Artificial. O verdadeiro desafio será garantir que o
+      <b>crescimento digital da humanidade</b> ocorra de forma <b>sustentável</b>.
+    </p>
+  </div>
+
+  <div class="text-card highlight closing">
+    <p>
+      A tecnologia está avançando mais rápido do que as soluções ambientais capazes de sustentá-la.
+      <b>Compreender esse impacto é o primeiro passo para transformá-lo.</b>
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="usa.html">
+        Explorar o mapa dos EUA <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <a class="btn btn-ghost" href="indexV2.html">Ver analise de Phoenix</a>
+    </div>
+  </div>
+
+</article>
+
+<script src="https://unpkg.com/globe.gl@2.32.0/dist/globe.gl.min.js"></script>
+<script src="js/landing.js"></script>
+<script src="js/mission-header.js"></script>
+</body>
+</html>

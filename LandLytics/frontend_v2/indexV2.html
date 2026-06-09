@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
 
+  <link rel="stylesheet" href="css/tokens.css" />
   <link rel="stylesheet" href="css/styleV2.css" />
 </head>
 <body>
@@ -21,8 +22,7 @@
 <a href="#main-map" class="skip-link">Pular para o mapa</a>
 
 <div id="loading" role="status" aria-live="polite">
-  <div class="spinner" aria-hidden="true"></div>
-  <p>Inicializando painel de missão...</p>
+  <p class="loading-text">Carregando missão de análise de LST via Landsat 8 / 9</p>
 </div>
 
 <div id="app">
@@ -211,9 +211,11 @@
         <strong>Satélites:</strong> Landsat 8 + Landsat 9<br />
         <strong>Fundo:</strong> RGB GEE - Landsat 9 mediana 2024-2025<br />
         <strong>Resolução:</strong> 30 m/pixel<br /><br />
-        Baseado no
+        Baseado nos estudos e pesquisas:
         <a href="https://github.com/AmenazaRoboto/El-calor-detras-de-la-nube" target="_blank"
            rel="noopener">El calor detrás de la nube</a> (Amenaza Roboto, Uruguai).
+           
+
       </div>
     </section>
 

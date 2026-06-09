@@ -38,6 +38,45 @@ pip install -r LandLytics/python/requirements.txt
 
 ---
 
+## Configurar o Mapbox (token) — obrigatório para o mapa dos EUA
+
+O mapa dos EUA (`usa.html`) usa **Mapbox GL JS**, que exige um token de acesso. Por
+segurança, o token **não fica no código nem no repositório**: ele é lido de uma
+**variável de ambiente** (`os.getenv("MAPBOX_TOKEN")`) e o `python/main.py` gera o
+arquivo `frontend_v2/js/config.js` (ignorado pelo git) a partir dela.
+
+**Passo a passo:**
+
+1. Crie uma conta grátis em **https://www.mapbox.com**.
+2. Acesse **Account → Tokens**. Copie o **Default public token** (começa com `pk.`)
+   ou crie um novo. Recomendado: em **URL restrictions**, adicione `http://localhost:8766`
+   (e o domínio do seu deploy, se houver) — assim o token só funciona nos seus endereços.
+3. Defina a variável de ambiente `MAPBOX_TOKEN`:
+
+   ```powershell
+   # Windows PowerShell (vale para a sessão atual do terminal)
+   $env:MAPBOX_TOKEN = "pk....seu_token_aqui"
+   ```
+   ```bash
+   # Linux / macOS
+   export MAPBOX_TOKEN="pk....seu_token_aqui"
+   ```
+   > Em **deploy**, configure `MAPBOX_TOKEN` nas *environment variables* da plataforma.
+
+4. Gere o `config.js` (é o **passo 0** do pipeline):
+
+   ```powershell
+   python LandLytics/python/main.py
+   ```
+   Isso cria `frontend_v2/js/config.js` com o token. (Modelo do formato em
+   `frontend_v2/js/config.example.js`.) Se a variável não estiver definida, o `main.py`
+   avisa e o mapa exibe uma mensagem pedindo a configuração — o resto do site funciona.
+
+> 🔒 O `config.js` está no `.gitignore` e **nunca** é versionado. Só o
+> `config.example.js` (com placeholder) vai para o repositório.
+
+---
+
 ## Rodar o pipeline V2
 
 ```powershell
@@ -97,7 +136,14 @@ LandLytics/
 │   ├── generate_background.py     # imagem RGB de fundo
 │   ├── analysis_v2.py             # modelo DiD (ferramenta separada)
 │   └── requirements.txt
-├── frontend_v2/                   # Visualização web (Leaflet + Chart.js)
+├── frontend_v2/                   # Visualização web (3 telas)
+│   ├── index.html                 # tela inicial: globo 3D (globe.gl)
+│   ├── usa.html                   # mapa dos EUA (Mapbox) + impactos
+│   ├── indexV2.html               # painel de missão (Leaflet)
+│   ├── css/                       # tokens.css (design system), landing.css, mission-header.css, usa.css, usa-sidebar.css, styleV2.css
+│   ├── js/                        # landing.js, mission-header.js, usa.js, mainV2.js, telemetryV2.js
+│   ├── data/                      # datacenters_usa.json (5 data centers)
+│   └── assets/                    # Logo.png, moodboard.html e referências visuais
 └── data/
     ├── gee_exports_v2/            # inputs do GEE (TIFs via Drive, CSVs no repo)
     ├── sites.geojson
@@ -202,17 +248,37 @@ Direção visual completa (referências, análise crítica, paleta e tipografia)
 laranja como cor de missão (datacenter), verde/vermelho reservados a estado (nominal/alerta),
 tipografia **Inter** com numerais tabulares para alinhar as leituras de telemetria.
 
-### Visão das telas (uma tela, regiões)
-- **Mapa orbital** (`<main>`): Leaflet com fundo RGB (GEE) + camada de anomalia LST + polígonos
-  dos sites; banner de **alerta crítico** sobreposto.
-- **Painel de missão** (`<aside>`): telemetria ao vivo, controles (botões + formulário),
-  camadas, períodos, sites, resultados do modelo, série temporal e metodologia.
+### Telas e fluxo do site
+O site tem três telas, todas em `frontend_v2/`, num fluxo simples da apresentação até o dado real:
+
+1. **Tela inicial — globo 3D** (`index.html`): portal de entrada. No topo, um **header de
+   mission control** (faixa de telemetria com relógio de Brasília ao vivo, status do sistema,
+   modo operacional e banner de alerta térmico). Na coluna direita, um globo (globe.gl) gira como
+   elemento visual da Terra; na coluna esquerda, um texto em cards explica o impacto ambiental e os
+   botões levam às outras telas. Estrutura semântica `header / main / article`, com o título da
+   análise como heading do artigo.
+2. **Mapa dos EUA** (`usa.html`): mapa Mapbox com 5 data centers reais (localização verificada em
+   catálogos públicos), filtro por estado, métricas, ranking e cards de impacto. Estrutura
+   `header / nav / aside / main / section / article`.
+3. **Painel de missão** (`indexV2.html`): a tela analítica principal, com dados reais de satélite.
+   Abre com uma **tela de carregamento da missão** (texto "Carregando missão de análise de LST via
+   Landsat 8 / 9", exibida por um tempo mínimo via `setTimeout` no `mainV2.js`).
+   - **Mapa orbital** (`<main>`): Leaflet com fundo RGB (GEE) + camada de anomalia LST + polígonos
+     dos sites; banner de **alerta crítico** sobreposto.
+   - **Painel de missão** (`<aside>`): telemetria ao vivo, controles (botões + formulário),
+     camadas, períodos, sites e metodologia.
+
+**Fluxo:** `index.html` (globo) → `usa.html` (mapa dos EUA) → clique em Phoenix → `indexV2.html` (satélite).
 
 ### Decisões de responsividade
-- Breakpoints `@media` em **1024 / 768 / 480 px**.
-- ≤768 px: layout empilha — mapa no topo (50vh) e painel rolável embaixo.
-- ≤480 px: fontes/margens reduzidas e alvos de toque maiores.
-- `map.invalidateSize()` no `resize`/`orientationchange` (evita tiles cinza ao girar a tela).
+- **Painel de missão** (`indexV2.html`): breakpoints `@media` em **1024 / 768 / 480 px**.
+  ≤768 px empilha (mapa no topo, painel rolável embaixo); ≤480 px reduz fontes/margens e aumenta
+  alvos de toque; `map.invalidateSize()` no `resize`/`orientationchange` evita tiles cinza.
+- **Tela inicial — globo** (`index.html`): duas colunas (texto à esquerda, globo à direita) no
+  desktop; **≤900 px** empilha e o globo vira um fundo discreto em largura total; ajustes finos
+  **≤480 px**. O globo é redimensionado no `resize`.
+- **Mapa dos EUA** (`usa.html`): breakpoints em **1024 / 768 / 480 px**; ≤768 px o painel lateral
+  desce abaixo do mapa.
 
 ### Decisões de acessibilidade
 - Landmarks semânticos: `header / nav / main / aside / section / footer` (sem "div soup").
@@ -221,11 +287,21 @@ tipografia **Inter** com numerais tabulares para alinhar as leituras de telemetr
   **skip link** "Pular para o mapa"; foco visível (`:focus-visible`);
   `prefers-reduced-motion` desliga animações.
 - Tabela de telemetria com `caption`, `scope` em `th` e descrição.
+- **Telas novas:** logo com `alt` descritivo (sem imagem sem `alt`); métricas, ranking e stats como
+  listas (`<ul>`/`<li>`); itens de ranking e marcadores com `role="button"`, `tabindex` e ativação
+  por teclado (Enter/Espaço); skip link em cada tela; sem estilo inline no HTML.
+
+### Tokens (design system)
+A paleta e a forma ficam centralizadas em **`frontend_v2/css/tokens.css`** (fonte única,
+carregada antes do CSS de cada tela). Os CSS de tela só guardam tokens próprios (ex.: `--panel-w`,
+`--radius` do painel V2) e os componentes (`mission-header.css`, `usa-sidebar.css`) herdam as cores
+da paleta central via `var(--accent)`, `var(--danger)` etc. — sem hex duplicado.
 
 ### Componentes (estilizados por classe, sem estilo inline no HTML)
 Alerta crítico (`.alert-banner`), tabela de telemetria (`.telemetry-table`), botões
 (`.btn`/`.btn-primary`/`.btn-armed`), formulário (`.mission-form`), status pills
-(`.status-pill`), navegação do painel (`.panel-nav`).
+(`.status-pill`), navegação do painel (`.panel-nav`), header de missão (`.mc-*`) e console
+nacional (`.mcs-*`). Sem estilo inline nas telas (e o moodboard usa classes utilitárias).
 
 ### Entregáveis FED
 - `integrantes.txt` (raiz) — nome completo + RM de cada integrante.
@@ -235,8 +311,10 @@ Alerta crítico (`.alert-banner`), tabela de telemetria (`.telemetry-table`), bo
 
 ## Web Development (WD) — Manual de Interatividade
 
-A interatividade está em `frontend_v2/js/`: `mainV2.js` (mapa/camadas/resultados),
-`chartsV2.js` (série temporal) e `telemetryV2.js` (telemetria de tempo real / BOM).
+A interatividade está em `frontend_v2/js/`: na **tela inicial** `landing.js` (globo 3D) e
+`mission-header.js` (relógio de Brasília ao vivo + medição do header), no **mapa dos EUA**
+`usa.js` (Mapbox, filtros, ranking) e no **painel de missão** `mainV2.js`
+(mapa Leaflet / camadas / opacidade) e `telemetryV2.js` (telemetria de tempo real / BOM).
 
 ### Telemetria em tempo real (BOM)
 Ao abrir a página, a estação começa a **receber leituras simuladas do satélite a cada 2,5 s**
@@ -256,10 +334,34 @@ por episódio. O estado da conexão usa `navigator.onLine` e os eventos `online`
 | **Configurar limiar (formulário)** | digitar + Aplicar | Valida o número (0–20 °C); se inválido, mostra erro e `aria-invalid`; se válido, atualiza o limiar e reavalia. |
 | **Mapa de calor / Imagem de fundo** | checkbox | Liga/desliga as camadas do Leaflet. |
 | **Opacidade do calor** | slider | Ajusta a opacidade da camada de anomalia em tempo real. |
-| **Polígono do datacenter** | hover/clique | Mostra tooltip flutuante; clique destaca o card de resultado correspondente. |
+| **Polígono do datacenter** | hover | Mostra uma tooltip flutuante que segue o mouse sobre a área do CyrusOne. |
+
+### Telas de entrada (globo e mapa): onde clicar e o que acontece
+
+**Tela inicial — globo 3D (`index.html`)**
+
+| Controle | Ação | O que acontece na tela |
+|---|---|---|
+| **Globo** | arrastar | Gira o globo (controles do globe.gl); ele também gira sozinho. |
+| **Botão "Explorar o mapa dos EUA"** | clique | Leva ao mapa dos EUA (`usa.html`). |
+| **Botão "Ver análise de Phoenix"** | clique | Abre o painel de missão (`indexV2.html`). |
+
+**Mapa dos EUA (`usa.html`)**
+
+| Controle | Ação | O que acontece na tela |
+|---|---|---|
+| **Filtrar por estado** | selecionar | Filtra marcadores, métricas e ranking pelo estado escolhido. |
+| **Mostrar marcadores** | checkbox | Liga/desliga os marcadores do mapa. |
+| **Marcador de data center** | clique | Abre um popup com operador, status e capacidade. |
+| **Marcador de Phoenix** | clique | Abre o painel de missão (`indexV2.html`). |
+| **Item do ranking** | clique/Enter | Centraliza o mapa no data center (Phoenix abre o painel). |
+| **Resetar** | clique | Limpa o filtro e volta à visão nacional. |
 
 ### Recursos de JavaScript demonstrados
 - **DOM:** `getElementById`, `textContent`, `classList`, `setAttribute`, criação/atualização de conteúdo.
 - **Eventos:** `addEventListener` para `click`, `submit`, `input`, `change`, `online`/`offline`.
 - **BOM:** `setInterval`, `setTimeout`, `navigator.onLine`, `window.alert`, `window.confirm`.
 - **Lógica:** validação de formulário, alternância de estado seguro→alerta, simulação de leituras.
+- **Telas de entrada:** `fetch` de JSON, `createElement`/`appendChild` para marcadores e ranking,
+  `addEventListener` (`click`, `change`, `keydown`, `mousemove`, `resize`), navegação por
+  `window.location`, e as bibliotecas de mapa globe.gl e Mapbox GL JS.

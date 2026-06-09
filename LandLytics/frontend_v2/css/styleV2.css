@@ -1,22 +1,13 @@
 /* ─── Reset e base ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Paleta base (cores e texto) vem de css/tokens.css, carregado antes.
+   Aqui ficam só os tokens próprios do painel V2, com valores diferentes do padrão.
+   Contraste WCAG AA sobre #0d0d0d: --text-muted ~9:1, --text-dim ~4.7:1. */
 :root {
-  --bg:        #0d0d0d;
-  --panel-bg:  rgba(13, 13, 13, 0.92);
-  --border:    rgba(255,255,255,0.18);
-  --accent:    #ff9800;
-  --accent2:   #ffcc02;
-  --text:      #f0f0f0;
-  /* Contraste mínimo WCAG AA sobre #0d0d0d:
-     --text-muted ~9:1, --text-dim ~4.7:1 (ambos passam para texto normal). */
-  --text-muted:#aeb6c2;
-  --text-dim:  #8e96a3;
-  --ok:        #29c267;
-  --danger:    #ff5a4d;
-  --danger-bg: #3a1410;
-  --panel-w:   340px;
-  --radius:    6px;
+  --border:  rgba(255, 255, 255, 0.18); /* bordas do painel um pouco mais visíveis */
+  --panel-w: 340px;                      /* largura do painel lateral */
+  --radius:  6px;                        /* raio menor no painel V2 */
 }
 
 /* ─── Acessibilidade: skip link, foco visível, conteúdo só p/ leitor ─── */
@@ -84,7 +75,7 @@ html, body {
   display: inline-block;
   background: var(--accent);
   color: #000;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.14em;
   padding: 3px 8px;
@@ -248,7 +239,26 @@ input[type="range"] {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-#loading p { font-size: 13px; color: var(--text-muted); }
+/* Tela de carregamento: apenas o texto da missão, em laranja com brilho quente */
+.loading-text {
+  max-width: 540px;
+  padding: 0 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow:
+    0 0 10px rgba(255, 152, 0, 0.55),
+    0 0 22px rgba(255, 152, 0, 0.3);
+  animation: loadingpulse 1.6s ease-in-out infinite;
+}
+@keyframes loadingpulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
 
 /* ─── Atribuição ─── */
 #attribution {
@@ -306,7 +316,7 @@ input[type="range"] {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 9px;
+  font-size: 10px;
   margin-top: 6px;
 }
 .mission-meta dd { color: var(--text-muted); margin: 0; }
@@ -364,7 +374,7 @@ input[type="range"] {
 }
 .telemetry-table thead th {
   color: var(--text-muted);
-  font-size: 9.5px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 700;
@@ -473,7 +483,26 @@ input[type="range"] {
   50%      { box-shadow: 0 0 0 4px rgba(255,90,77,0.25), 0 8px 28px rgba(0,0,0,0.55); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .alert-banner, .tlm-flash, .spinner { animation: none; }
+  .alert-banner, .tlm-flash, .spinner, .loading-text { animation: none; }
+}
+
+/* ─── Brilho quente nos textos alaranjados (mesma intensidade do index.html) ───
+   Aplica-se SOMENTE a textos cuja cor é o laranja --accent (#ff9800);
+   elementos com fundo laranja e texto preto (badge, btn-primary) ficam de fora. */
+#panel-header h1,
+.mission-meta dt,
+.telemetry-table .row-delta th,
+.telemetry-table .row-delta td,
+.period-pill.ops,
+.methodology code,
+.methodology a,
+#attribution a,
+.mission-brief a,
+.panel-nav a:hover,
+.panel-nav a:focus-visible {
+  text-shadow:
+    0 0 10px rgba(255, 152, 0, 0.55),
+    0 0 22px rgba(255, 152, 0, 0.3);
 }
 
 /* ─── Listas / textos do painel (ex-inline) ─── */

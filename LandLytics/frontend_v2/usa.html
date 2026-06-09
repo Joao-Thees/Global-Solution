@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa dos Data Centers dos EUA | LandLytics</title>
+  <meta name="description"
+        content="Mapa interativo dos data centers dos Estados Unidos, com contexto sobre os
+                 impactos reais que essas instalações causam em quem mora por perto." />
+
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/usa.css" />
+  <link rel="stylesheet" href="css/usa-sidebar.css" />
+</head>
+<body>
+
+<a href="#map" class="skip-link">Pular para o mapa</a>
+
+<div class="app-shell">
+
+  <!-- Console de operações: contexto, filtros, métricas e impactos -->
+  <aside class="sidebar mc-sidebar" aria-label="Console de operações de observação da Terra">
+
+    <!-- 1 · MARCA -->
+    <header class="mcs-brand">
+      <span class="mcs-logo"><img src="assets/Logo.png" alt="Logo do LandLytics" /></span>
+      <div class="mcs-brand-text">
+        <h1>LandLytics <span>USA</span></h1>
+        <p>Console de Observação · Impacto Térmico de Data Centers</p>
+      </div>
+    </header>
+
+    <div class="mcs-status">
+      <span class="mcs-status-pill">
+        <span class="mcs-led" aria-hidden="true"></span> Console Nominal
+      </span>
+      <span class="mcs-status-code">EO-LST · NAT-US</span>
+    </div>
+
+    <!-- 2 · NAVEGAÇÃO -->
+    <nav class="mcs-nav" aria-label="Navegação entre as telas">
+      <a class="mcs-back" href="index.html">
+        <span class="mcs-back-ico" aria-hidden="true">&larr;</span>
+        Voltar ao globo / visão da Terra
+      </a>
+    </nav>
+
+    <!-- 3 · CARD DO MAPA NACIONAL (mantido, com destaque) -->
+    <section class="mcs-feature" aria-labelledby="intro-title">
+      <span class="mcs-eyebrow">Mapa de Análise ESTADOS UNIDOS (USA)</span>
+      <h2 id="intro-title">Data Centers - O projeto - Impactos e Conscientização:</h2>
+      <p>
+        Cada ponto é um data center real, com localização verificada em catálogos
+        públicos. Passe o mouse nos marcadores e clique em <strong>Phoenix</strong>
+        para abrir a análise real feita por satélite. O projeto utiliza de tecnologia espacial para uma análise crítica dos recursos da terra. O objetivo é olhar mais para dentro da nossa casa do que para fora, utilizando recursos espaciais.
+        Enquanto bilhões são gastos para exploração interplanetária em via de buscar recursos  que já são escassos na Terra e na análise de possibilidade de moradia no local, o LandLytics busca conscientizar sobre o que já temos e o que devemos manter sustentável.
+      </p>
+    </section>
+
+    <!-- 4 · O QUE É UM DATA CENTER -->
+    <section class="mcs-section" aria-labelledby="oque-title">
+      <h3 id="oque-title" class="mcs-section-title">
+        <span class="mcs-section-bar" aria-hidden="true"></span> O que é um Data Center?
+      </h3>
+      <div class="mcs-cards">
+        <article class="mcs-card">
+          <h4><span class="mcs-ico" aria-hidden="true">&#127970;</span> A fábrica invisível da internet</h4>
+          <p>
+            É uma instalação repleta de servidores que operam continuamente para sustentar a nuvem, streaming e IA. Esse processamento gera calor constante, exigindo sistemas intensivos de resfriamento e elevando o consumo energético da região.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5 · IMPACTOS NA COMUNIDADE (cards mantidos de usa.html) -->
+    <section class="mcs-section" aria-labelledby="impacto-title">
+      <h3 id="impacto-title" class="mcs-section-title">
+        <span class="mcs-section-bar" aria-hidden="true"></span> Impactos reais em quem mora perto
+      </h3>
+      <div class="mcs-cards">
+
+        <article class="mcs-card">
+          <h4><span class="mcs-ico" aria-hidden="true">&#128293;</span> Calor de superfície</h4>
+          <p>
+            Telhados e equipamentos liberam calor e elevam a temperatura no entorno,
+            reforçando o efeito de ilha de calor urbana. Em Phoenix, medições por
+            satélite registraram a superfície 4°C mais quente próxima ao data center do
+            que na área verde de controle. Estudos indicam que este valor pode chegar até 9°C de variaçãõ de temperatura.
+          </p>
+          <p class="mcs-src">Fontes: <a href="https://techxplore.com/news/2026-05-centers-nearby-temperatures-degrees-phoenix.html"  target="_blank" rel="noopener">techxplore.com (Phoenix, 2026)</a>.</p>
+          <p class="mcs-src">Fontes: <a href="https://febrabantech.febraban.org.br/temas/infraestrutura/centros-de-dados-podem-elevar-temperaturas-do-ambiente" target="_blank" rel="noopener">febrabantech.org.br</a></p>
+        </article>
+
+        <article class="mcs-card">
+          <h4><span class="mcs-ico" aria-hidden="true">&#128167;</span> Consumo de água</h4>
+          <p>
+            Muitos sistemas de resfriamento evaporam água potável para baixar a
+            temperatura. Em regiões áridas como o Arizona, esse uso compete com o
+            abastecimento das cidades em meio a secas prolongadas.
+          </p>
+        </article>
+
+        <article class="mcs-card">
+          <h4><span class="mcs-ico" aria-hidden="true">&#9889;</span> Demanda de energia</h4>
+          <p>
+            Em Northern Virginia, a chamada Data Center Alley concentra a maior
+            densidade de data centers do planeta e pressiona a rede elétrica,
+            puxando para cima a geração e os custos da região.
+          </p>
+        </article>
+
+        <article class="mcs-card">
+          <h4><span class="mcs-ico" aria-hidden="true">&#128264;</span> Ruído constante</h4>
+          <p>
+            Os sistemas de ventilação funcionam o tempo todo. Comunidades vizinhas,
+            de Chandler (AZ) a vilarejos da Virgínia, já registraram queixas sobre o
+            zumbido contínuo, que afeta o sono e o sossego.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 6 · FILTROS -->
+    <section class="mcs-section" aria-labelledby="filtros-title">
+      <h3 id="filtros-title" class="mcs-section-title">
+        <span class="mcs-section-bar" aria-hidden="true"></span> Filtros
+      </h3>
+      <div class="mcs-controls">
+        <label class="mcs-field-label" for="stateFilter">Filtrar data centers por estado</label>
+        <select id="stateFilter">
+          <option value="all">Todos os estados</option>
+        </select>
+
+        <label class="mcs-check">
+          <input type="checkbox" id="toggleMarkers" checked />
+          Mostrar marcadores no mapa
+        </label>
+      </div>
+    </section>
+
+    <!-- Aviso: dados reais vs simulados -->
+    <div class="mcs-disclaimer" role="note">
+      <span class="mcs-disclaimer-tag">
+        <span class="mcs-disclaimer-led" aria-hidden="true"></span> Origem dos dados
+      </span>
+      <p>
+        Apenas <strong>Phoenix, AZ (CyrusOne)</strong> possui estatísticas térmicas
+        <b>reais</b> por satélite (Landsat / Google Earth Engine). Os demais sites
+        exibem capacidade estimada e <b>estatísticas simuladas</b>, sinalizadas com o selo
+        <span class="mcs-inline-tag mcs-inline-tag--sim">Simulado</span>.
+      </p>
+    </div>
+
+    <!-- 7 · RESUMO DA MISSÃO -->
+    <section class="mcs-section" aria-labelledby="resumo-title">
+      <h3 id="resumo-title" class="mcs-section-title">
+        <span class="mcs-section-bar" aria-hidden="true"></span> Resumo da missão
+      </h3>
+      <ul class="mcs-metrics">
+        <li class="mcs-metric">
+          <span class="mcs-metric-label">Data Centers</span>
+          <strong id="totalSites">0</strong>
+          <span class="mcs-metric-unit">mapeados</span>
+        </li>
+        <li class="mcs-metric">
+          <span class="mcs-metric-label">Capacidade</span>
+          <strong id="totalMw">0</strong>
+          <span class="mcs-metric-unit">MW totais</span>
+        </li>
+        <li class="mcs-metric">
+          <span class="mcs-metric-label">Cobertura</span>
+          <strong id="statesCount">0</strong>
+          <span class="mcs-metric-unit">estados</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 8 · DATA CENTERS ANALISADOS (+ 9 · reset) -->
+    <section class="mcs-section" aria-labelledby="rank-title">
+      <div class="mcs-section-head">
+        <h3 id="rank-title" class="mcs-section-title">
+          <span class="mcs-section-bar" aria-hidden="true"></span> Data centers analisados
+        </h3>
+        <button id="resetBtn" class="mcs-reset" type="button">Resetar</button>
+      </div>
+      <ul id="rankList" class="mcs-dc-list"></ul>
+    </section>
+
+    <p class="mcs-footer">
+      Localizações verificadas em catálogos públicos como o datacentermap.com.
+      Apenas o data center de Phoenix tem dados reais de temperatura por satélite
+      (Landsat via Google Earth Engine), exibidos no painel de missão. Clique em
+      Phoenix no mapa para abri-lo.
+    </p>
+  </aside>
+
+  <!-- Área do mapa -->
+  <main class="map-area" aria-label="Mapa dos data centers dos Estados Unidos">
+    <div class="topbar">
+      <div>
+        <strong>Data centers dos Estados Unidos</strong>
+        <span>Localização e capacidade dos principais data centers do país.</span>
+      </div>
+    </div>
+
+    <div id="map" role="application" aria-label="Mapa interativo Mapbox com os data centers dos Estados Unidos"></div>
+  </main>
+
+</div>
+
+<!-- config.js (token Mapbox) é gerado por python/main.py e ignorado pelo git -->
+<script src="js/config.js"></script>
+<script src="js/usa.js"></script>
+</body>
+</html>

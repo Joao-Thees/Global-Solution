@@ -5,6 +5,11 @@
 
 const DATA = '../data';
 
+// Tela de carregamento "fictícia": garante um tempo mínimo de exibição para dar
+// para ler o texto da missão, mesmo que o carregamento real termine antes.
+const LOADING_START = Date.now();
+const MIN_LOADING_MS = 3000;
+
 // mapa sem camada base; quem faz o fundo é a imagem do GEE logo abaixo
 const map = L.map('map', {
   center: [33.270, -111.889],
@@ -156,8 +161,12 @@ function setupControls() {
 function hideLoading() {
   const el = document.getElementById('loading');
   if (!el) return;
-  el.classList.add('hidden');
-  setTimeout(() => el.remove(), 500);
+  // respeita o tempo mínimo: se o real terminou antes, espera o restante
+  const remaining = Math.max(0, MIN_LOADING_MS - (Date.now() - LOADING_START));
+  setTimeout(() => {
+    el.classList.add('hidden');
+    setTimeout(() => el.remove(), 500);
+  }, remaining);
 }
 
 async function init() {

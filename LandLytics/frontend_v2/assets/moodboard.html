@@ -31,6 +31,9 @@
     /* a imagem cobre o retângulo listrado quando existir; se faltar, o onerror
        remove o img e a legenda volta a aparecer */
     .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    /* logos ficam melhor contidos (sem corte) sobre um fundo escuro */
+    .thumb.contain{background:#0d1117}
+    .thumb.contain img{object-fit:contain;padding:16px}
     .thumb-cap{position:relative;z-index:1}
     .card .body{padding:14px}
     .tag{font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
@@ -45,6 +48,23 @@
     a{color:var(--accent)}
     ul{margin:6px 0 0 18px}
     li{color:var(--muted);font-size:13px;margin-bottom:4px}
+
+    /* utilitários (substituem os antigos estilos inline) */
+    .grid.refs{margin-top:14px}
+    .chip.c-bg{background:#0d0d0d}
+    .chip.c-card{background:#16181d}
+    .chip.c-txt{background:#f0f0f0}
+    .chip.c-muted{background:#aeb6c2}
+    .chip.c-accent{background:#ff9800}
+    .chip.c-dc{background:#ff6600}
+    .chip.c-attn{background:#ffcc02}
+    .chip.c-green{background:#00aa00}
+    .chip.c-alert{background:#ff5a4d}
+    .lab.on-light{color:#222}
+    .type-800{font-weight:800;font-size:28px}
+    .type-600{font-weight:600;font-size:16px;color:var(--muted)}
+    .type-400{font-weight:400;font-size:14px;color:var(--muted)}
+    .note.end{margin-top:30px}
   </style>
 </head>
 <body>
@@ -68,7 +88,7 @@
   <b>adotamos</b> e o que <b>evitamos</b>.
 </p>
 
-<div class="grid" style="margin-top:14px">
+<div class="grid refs">
   <figure class="card">
     <div class="thumb">
       <img src="ref-nasa-eyes.png" alt="NASA: Eyes on the Earth" onerror="this.remove()" />
@@ -144,28 +164,56 @@
         puramente acadêmica: reposicionamos como missão.</p>
     </div>
   </figure>
+
+  <figure class="card">
+    <div class="thumb contain">
+      <img src="ref-baxtel.png" alt="Logo do Baxtel, plataforma de mapa de data centers" onerror="this.remove()" />
+    </div>
+    <div class="body">
+      <span class="tag">Mapa / catálogo</span>
+      <h3>Baxtel</h3>
+      <p class="crit"><b>Adotamos:</b> a lógica de mapa nacional com marcadores e um painel
+        lateral que cataloga cada data center (operador, capacidade, localização), base da tela
+        <b>usa.html</b>. <b>Evitamos:</b> a densidade comercial e os menus profundos do site;
+        aqui tudo fica a um clique e só com dado real.</p>
+    </div>
+  </figure>
+
+  <figure class="card">
+    <div class="thumb">
+      <img src="ref-earth.jpg" alt="Imagem da Terra vista do espaço (NASA Blue Marble)" onerror="this.remove()" />
+    </div>
+    <div class="body">
+      <span class="tag">Portal / Earth Observation</span>
+      <h3>Globo 3D interativo</h3>
+      <p class="crit"><b>Adotamos:</b> a Terra em 3D girando como portal de entrada (tela
+        <b>index.html</b>), reforçando o tema de observação orbital antes do dado técnico, no
+        espírito do NASA Eyes. <b>Evitamos:</b> poluir o globo com marcadores e brilhos;
+        deixamos a esfera limpa para não competir com a leitura do texto ao lado.</p>
+    </div>
+  </figure>
 </div>
 
 <h2>Paleta de cores</h2>
 <p>Escura para reduzir fadiga em monitoramento prolongado; laranja de missão como acento;
    verde/vermelho reservados a estado (nominal/alerta). Contrastes conferidos para WCAG AA.</p>
 <div class="palette">
-  <div class="sw"><div class="chip" style="background:#0d0d0d"></div><div class="lab">#0D0D0D · fundo</div></div>
-  <div class="sw"><div class="chip" style="background:#16181d"></div><div class="lab">#16181D · cartão</div></div>
-  <div class="sw"><div class="chip" style="background:#f0f0f0"></div><div class="lab" style="color:#222">#F0F0F0 · texto</div></div>
-  <div class="sw"><div class="chip" style="background:#aeb6c2"></div><div class="lab" style="color:#222">#AEB6C2 · texto 2</div></div>
-  <div class="sw"><div class="chip" style="background:#ff9800"></div><div class="lab">#FF9800 · acento de missão</div></div>
-  <div class="sw"><div class="chip" style="background:#ff6600"></div><div class="lab">#FF6600 · datacenter</div></div>
-  <div class="sw"><div class="chip" style="background:#ffcc02"></div><div class="lab" style="color:#222">#FFCC02 · destaque</div></div>
-  <div class="sw"><div class="chip" style="background:#00aa00"></div><div class="lab">#00AA00 · controle</div></div>
-  <div class="sw"><div class="chip" style="background:#ff5a4d"></div><div class="lab">#FF5A4D · alerta</div></div>
+  <div class="sw"><div class="chip c-bg"></div><div class="lab">#0D0D0D · fundo</div></div>
+  <div class="sw"><div class="chip c-card"></div><div class="lab">#16181D · cartão</div></div>
+  <div class="sw"><div class="chip c-txt"></div><div class="lab on-light">#F0F0F0 · texto</div></div>
+  <div class="sw"><div class="chip c-muted"></div><div class="lab on-light">#AEB6C2 · texto 2</div></div>
+  <div class="sw"><div class="chip c-accent"></div><div class="lab">#FF9800 · acento de missão</div></div>
+  <div class="sw"><div class="chip c-dc"></div><div class="lab">#FF6600 · datacenter</div></div>
+  <div class="sw"><div class="chip c-attn"></div><div class="lab on-light">#FFCC02 · destaque</div></div>
+  <div class="sw"><div class="chip c-green"></div><div class="lab">#00AA00 · controle</div></div>
+  <div class="sw"><div class="chip c-alert"></div><div class="lab">#FF5A4D · alerta</div></div>
 </div>
 
 <h2>Tipografia</h2>
 <div class="type-sample">
-  <div style="font-weight:800;font-size:28px">Inter 800: Títulos de missão</div>
-  <div style="font-weight:600;font-size:16px;color:var(--muted)">Inter 600: Rótulos e seções</div>
-  <div style="font-weight:400;font-size:14px;color:var(--muted)">Inter 400: Texto corrido e telemetria (tabular-nums nos números)</div>
+  <div class="type-800">Inter 800: Títulos de missão</div>
+  <div class="type-600">Inter 600: Rótulos e seções</div>
+  <div class="type-400">Inter 400: Texto corrido e telemetria (tabular-nums nos números)</div>
   <p class="note">Inter: alta legibilidade em telas, numerais tabulares (alinham as
      leituras de temperatura), licença livre (Google Fonts). Pesos limitados a 400/600/700/800
      para hierarquia clara sem ruído.</p>
@@ -180,7 +228,7 @@
   <li><b>Responsivo:</b> em telas pequenas o mapa vira topo e o painel desce, sem perder o alerta.</li>
 </ul>
 
-<p class="note" style="margin-top:30px">
+<p class="note end">
   Moodboard do projeto LandLytics · disciplina Front-End Design (FED) ·
   Global Solution 2026 · FIAP Rio. As imagens de referência são marcadas de terceiros usadas
   apenas para estudo de direção visual.

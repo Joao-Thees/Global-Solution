@@ -1,4 +1,5 @@
-# Arizona Datacenter Heat Analysis — V2
+![LandLytics Logo](Logo.png)
+# LandLytics — Arizona Datacenter Heat Analysis (V2)
 
 Análise do impacto térmico do **CyrusOne Phoenix Datacenter** sobre a temperatura superficial (LST) em relação a uma área verde adjacente, Phoenix, AZ — 2025.
 
@@ -32,7 +33,7 @@ data/gee_exports_v2/
 .venv\Scripts\Activate.ps1
 
 # Instalar dependências
-pip install -r arizona-heat-analysis/python/requirements.txt
+pip install -r LandLytics/python/requirements.txt
 ```
 
 ---
@@ -40,7 +41,7 @@ pip install -r arizona-heat-analysis/python/requirements.txt
 ## Rodar o pipeline V2
 
 ```powershell
-cd arizona-heat-analysis/python
+cd LandLytics/python
 python main.py
 ```
 
@@ -57,11 +58,11 @@ Executa em sequência:
 > (`heatmap_v2.png`, `rgb_background.png`) não vêm no repositório, são gerados
 > pelo pipeline.
 
-Sirva a partir da raiz `arizona-heat-analysis` (NÃO de dentro de `frontend_v2`), pois o
+Sirva a partir da raiz `LandLytics` (NÃO de dentro de `frontend_v2`), pois o
 frontend busca os dados em `../data/...`:
 
 ```powershell
-cd arizona-heat-analysis
+cd LandLytics
 python -m http.server 8766
 # Acesse: http://localhost:8766/frontend_v2/indexV2.html
 ```
@@ -72,7 +73,7 @@ O `python main.py` já roda o modelo. Para executar **apenas** o motor analític
 (sem gerar PDF/mapas), o `analysis_v2.py` continua funcionando isolado:
 
 ```powershell
-python arizona-heat-analysis/python/analysis_v2.py
+python LandLytics/python/analysis_v2.py
 ```
 
 Roda o modelo Diferenças-em-Diferenças (2020–2026) e atualiza `data/results_v2.json` usado pelos gráficos do frontend.
@@ -82,7 +83,7 @@ Roda o modelo Diferenças-em-Diferenças (2020–2026) e atualiza `data/results_
 ## Estrutura
 
 ```
-arizona-heat-analysis/
+LandLytics/
 ├── gee_v2/                        # Scripts Google Earth Engine (JavaScript)
 │   ├── 01_dados_sat.js            # extrai LST, NDVI, NDBI por site/zona/ano
 │   ├── 02_reflst.js               # temperatura de referência regional
@@ -140,7 +141,7 @@ cobertura do solo ou da tendência regional).
 
 ### Como executar
 ```powershell
-cd arizona-heat-analysis/python
+cd LandLytics/python
 python main.py
 ```
 `main.py` é o **motor analítico** (ponto de entrada único): roda o modelo DiD

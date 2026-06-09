@@ -7,33 +7,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Instalar dependências:**
 ```powershell
 .venv\Scripts\Activate.ps1
-pip install -r arizona-heat-analysis/python/requirements.txt
+pip install -r LandLytics/python/requirements.txt
 ```
 
 **Rodar o pipeline completo (análise + heatmap):**
 ```powershell
-cd arizona-heat-analysis/python
+cd LandLytics/python
 python run_all.py
 ```
 
 **Rodar scripts individualmente:**
 ```powershell
-python arizona-heat-analysis/python/analysis.py       # modelo DiD (v1)
-python arizona-heat-analysis/python/analysis_v2.py    # modelo DiD (v2)
-python arizona-heat-analysis/python/generate_heatmap.py    # heatmap v1
-python arizona-heat-analysis/python/generate_heatmap_v2.py # heatmap v2
-python arizona-heat-analysis/python/generate_background.py # RGB background v2
+python LandLytics/python/analysis.py       # modelo DiD (v1)
+python LandLytics/python/analysis_v2.py    # modelo DiD (v2)
+python LandLytics/python/generate_heatmap.py    # heatmap v1
+python LandLytics/python/generate_heatmap_v2.py # heatmap v2
+python LandLytics/python/generate_background.py # RGB background v2
 ```
 
 **Servir o frontend:**
 
-Sirva a partir da raiz `arizona-heat-analysis` (NÃO de dentro de `frontend_v2`), pois o
+Sirva a partir da raiz `LandLytics` (NÃO de dentro de `frontend_v2`), pois o
 frontend busca os dados em `../data/...`. Iniciar o servidor dentro de `frontend_v2` faz
 o `python -m http.server` bloquear o acesso a `../data` (path traversal acima da raiz),
 e o mapa fica preto / com 404 nos PNGs e JSONs.
 
 ```powershell
-cd arizona-heat-analysis
+cd LandLytics
 python -m http.server 8766
 # Acesse: http://localhost:8766/frontend_v2/indexV2.html
 ```

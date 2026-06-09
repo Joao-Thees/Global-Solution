@@ -173,7 +173,7 @@ def main():
 
     print("\n>> Gerando PDF...")
     gerar_pdf(stats_dc, stats_verde, n_cenas)
-    print(f"\n  Pronto. Abra: arizona-heat-analysis/data/relatorio_v2.pdf")
+    print(f"\n  Pronto. Abra: LandLytics/data/relatorio_v2.pdf")
 
 
 if __name__ == "__main__":
